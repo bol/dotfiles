@@ -42,7 +42,7 @@ end
 beautiful.init(awful.util.getdir("config") .. "/themes/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "st -f 'Source Code Pro:pixelsize=12:antialias=true:autohinting=true'"
+terminal = "st"
 editor = os.getenv("EDITOR") or "gvim"
 editor_cmd = terminal .. " -e " .. editor
 lock_cmd = 'slock'
