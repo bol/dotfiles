@@ -1,7 +1,6 @@
 #!/bin/bash
 
 DOTFILEDIR=$(cd $(dirname $0);pwd)
-sudo -k
 
 function link_conf() {
 	source=$1
