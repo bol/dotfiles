@@ -6,6 +6,8 @@ function link_conf() {
 	source=$1
 	target=$2
 
+	echo $target
+
 	[ -d $(dirname $2) ] || mkdir -p $(dirname $2)
 	[ -e $2 ] || ln -s $source $target
 }
