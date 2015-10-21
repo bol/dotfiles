@@ -1,0 +1,214 @@
+"
+" ~/.vimrc
+"
+" Compatibility
+" -----------------------------------------------------------------------------
+set nocompatible         " use vim defaults instead of vi
+set nomodeline           " prevent possible security holes
+if has("multi_byte")
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  "setglobal bomb
+  set fileencodings=ucs-bom,utf-8,latin1
+endif
+
+" Install Plugins
+" -----------------------------------------------------------------------------
+filetype off
+set runtimepath+=~/.vim/bundle/neobundle.vim/
+call neobundle#begin(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'bling/vim-airline'
+
+NeoBundle 'Syntastic'
+NeoBundle 'Valloric/YouCompleteMe', {
+\ 'build' : {
+\     'linux' : 'python2 install.py --system-libclang --system-boost --clang-completer',
+\    },
+\ }
+
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimproc.vim', {
+\ 'build' : {
+\     'linux' : 'make',
+\    },
+\ }
+NeoBundle 'sjl/gundo.vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'majutsushi/tagbar'
+
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'rust-lang/rust.vim'
+NeoBundle 'cespare/vim-toml'
+
+call neobundle#end()
+
+" Settings
+" -----------------------------------------------------------------------------
+" File detection
+filetype plugin indent on
+syntax on
+
+" General
+set backspace=2          " enable <BS> for everything
+"set colorcolumn=80       " visual indicator of column
+set completeopt-=preview " dont show preview window
+set laststatus=2         " always show status line
+set lazyredraw           " don't update screen when executing macros
+set nowrap               " disable word wrap
+set scrolloff=10         " cut off lines when scrolling up and down
+set showcmd              " show command on last line of screen
+set showmatch            " show bracket matches
+set spelllang=en_GB      " spell check with English English
+set textwidth=0          " don't break lines after some maximum width
+set title                " use filename in window title
+set wildmenu             " enhanced cmd line completion
+set hidden               " hide buffer instead of closing on switch
+set mouse-=a             " don't go to visual mode on mouse click
+let g:is_posix = 1
+
+" Folding
+set foldignore=          " don't ignore comments when folding
+set foldlevel=99         " open all folds by default
+set foldmethod=indent    " collapse code based on indent
+
+" Tabs
+set autoindent           " copy indent from previous line
+set noexpandtab          " replace tabs with spaces
+set shiftwidth=8         " spaces for autoindenting
+set smarttab             " <BS> removes shiftwidth worth of spaces
+set softtabstop=8        " spaces for editing, e.g. <Tab> or <BS>
+set tabstop=8            " spaces for <Tab>
+
+" Searches
+set hlsearch             " highlight search results
+set incsearch            " search whilst typing
+set ignorecase           " case insensitive searching
+set smartcase            " override ignorecase if upper case typed
+
+" Colors / Theme
+set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
+let g:solarized_termcolors=256
+set background=dark
+colorscheme solarized
+
+" history
+set history=10000
+
+" Clipboard
+set clipboard="autoselect,exclude=.*"
+
+" Hybrid line mode
+"set number
+"set relativenumber
+
+
+" gVim
+if has('gui_running')
+	set guioptions-=m               " remove menu
+	set guioptions-=T               " remove toolbar
+	set guioptions-=r               " remove right scrollbar
+	set guioptions-=b               " remove bottom scrollbar
+	set guioptions-=L               " remove left scrollbar
+	set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
+	set guifont=Sauce\ Code\ Powerline\ Normal\ 10
+	set lines=50 columns=100        " Initial size
+	" Paste from PRIMARY and CLIPBOARD
+	inoremap <silent> <M-v> <Esc>"+p`]a
+	inoremap <silent> <S-Insert> <Esc>"*p`]a
+endif
+
+" vimdiff
+if &diff
+	set diffopt=filler,foldcolumn:0
+endif
+
+" indenting
+set cindent
+set smartindent
+set ls=2
+
+" Plugin settings
+
+" Syntastic
+" -----------------------------------------------------------------------------
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+
+" Unite
+" -----------------------------------------------------------------------------
+nnoremap <C-p> :Unite -start-insert file_rec/async<CR>
+let g:unite_source_history_yank_enable = 1
+nnoremap <C-y> :Unite -start-insert history/yank<CR>
+
+" YouCompleteMe
+" -----------------------------------------------------------------------------
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+map <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" Gundo
+" -----------------------------------------------------------------------------
+map <C-u> :GundoToggle<CR>
+
+" Tagbar
+" -----------------------------------------------------------------------------
+nmap <C-t> :TagbarToggle<CR>
+
+" Maps
+" -----------------------------------------------------------------------------
+map <leader>jc :cnext<CR>
+map <leader>jl :lnext<CR>
+
+" Toggle Vexplore with Ctrl-E
+function! ToggleVExplorer()
+  if exists("t:expl_buf_num")
+      let expl_win_num = bufwinnr(t:expl_buf_num)
+      if expl_win_num != -1
+          let cur_win_nr = winnr()
+          exec expl_win_num . 'wincmd w'
+          close
+          exec cur_win_nr . 'wincmd w'
+          unlet t:expl_buf_num
+      else
+          unlet t:expl_buf_num
+      endif
+  else
+      exec '1wincmd w'
+      Vexplore
+      let t:expl_buf_num = bufnr("%")
+  endif
+endfunction
+" Hit enter in the file browser to open the selected
+" file with :vsplit to the right of the browser.
+let g:netrw_altv = 1
+let g:netrw_browse_split = 4
+let g:netrw_liststyle=3
+let g:netrw_winsize=14
+
+" Change directory to the current buffer when opening files.
+set autochdir
+map <silent> <C-E> :call ToggleVExplorer()<CR>
+
+" fugitive git bindings
+nnoremap <space>ga :Git add %:p<CR><CR>
+nnoremap <space>gs :Gstatus<CR>
+nnoremap <space>gc :Gcommit -v -q<CR>
+nnoremap <space>gt :Gcommit -v -q %:p<CR>
+nnoremap <space>gd :Gdiff<CR>
+nnoremap <space>ge :Gedit<CR>
+nnoremap <space>gr :Gread<CR>
+nnoremap <space>gw :Gwrite<CR><CR>
+nnoremap <space>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <space>gp :Ggrep<Space>
+nnoremap <space>gm :Gmove<Space>
+nnoremap <space>gb :Git branch<Space>
+nnoremap <space>go :Git checkout<Space>
+nnoremap <space>gps :Dispatch! git push<CR>
+nnoremap <space>gpl :Dispatch! git pull<CR>

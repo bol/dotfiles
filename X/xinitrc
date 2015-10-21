@@ -1,0 +1,14 @@
+[[ -d $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
+xset -b
+wmname Awesome
+[[ -f $HOME/.Xresources ]] && xrdb -merge ~/.Xresources
+
+[[ -d /etc/X11/xinit/xinitrc.d ]] && \
+	for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+		[ -x "$f" ] && . "$f" && echo "$f"
+	done
+start-pulseaudio-x11 &
+export __GL_SYNC_TO_VBLANK=1
+export __GL_YIELD="USLEEP"
+
+exec dbus-launch awesome
