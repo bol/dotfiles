@@ -87,24 +87,43 @@ diff -aNur st/config.h st-bol/config.h
  
  /*
   * Colors used, when the specific fg == defaultfg. So in reverse mode this
+diff -aNur st/no-bold-colors.diff st-bol/no-bold-colors.diff
+--- st/no-bold-colors.diff	1970-01-01 01:00:00.000000000 +0100
++++ st-bol/no-bold-colors.diff	2015-10-22 01:06:30.573231323 +0200
+@@ -0,0 +1,11 @@
++--- st/src/st-0.6/st.c	2015-07-07 22:26:44.000000000 +0200
+++++ st-bol/src/st-0.6/st.c	2015-10-22 01:05:30.973833906 +0200
++@@ -3454,7 +3454,7 @@
++ 
++ 	/* Change basic system colors [0-7] to bright system colors [8-15] */
++ 	if((base.mode & ATTR_BOLD_FAINT) == ATTR_BOLD && BETWEEN(base.fg, 0, 7))
++-		fg = &dc.col[base.fg + 8];
+++		fg = &dc.col[base.fg];
++ 
++ 	if(IS_SET(MODE_REVERSE)) {
++ 		if(fg == &dc.col[defaultfg]) {
 diff -aNur st/PKGBUILD st-bol/PKGBUILD
 --- st/PKGBUILD	2015-09-21 21:13:03.000000000 +0200
-+++ st-bol/PKGBUILD	2015-10-22 00:27:09.983681726 +0200
-@@ -27,4 +27,4 @@
++++ st-bol/PKGBUILD	2015-10-22 01:08:35.065305961 +0200
+@@ -11,11 +11,13 @@
+ makedepends=('ncurses')
+ url="http://st.suckless.org"
+ source=(http://dl.suckless.org/st/$pkgname-$pkgver.tar.gz
+-        config.h)
++        config.h
++	no-bold-colors.diff)
+ 
+ build() {
+   cd $srcdir/$pkgname-$pkgver
+   cp $srcdir/config.h config.h
++  patch < $srcdir/no-bold-colors.diff
+ 	make X11INC=/usr/include/X11 X11LIB=/usr/lib/X11
+ }
+ 
+@@ -27,4 +29,5 @@
  	install -Dm644 README "$pkgdir/usr/share/doc/$pkgname/README"
  }
  md5sums=('1a926f450b4eacb7e2f5ac5b8ffea7c8'
 -         '90ce5919be96de000bd9d9429b173490')
-+         '192a2ae51e12e2b1ddb6c21931174c34')
-diff -aNur st/.SRCINFO st-bol/.SRCINFO
---- st/.SRCINFO	2015-09-21 21:13:03.000000000 +0200
-+++ st-bol/.SRCINFO	2015-10-21 20:57:12.339745684 +0200
-@@ -11,7 +11,7 @@
- 	source = http://dl.suckless.org/st/st-0.6.tar.gz
- 	source = config.h
- 	md5sums = 1a926f450b4eacb7e2f5ac5b8ffea7c8
--	md5sums = 90ce5919be96de000bd9d9429b173490
-+	md5sums = cd90f3129db41a4e4ce063ea90c29147
- 
- pkgname = st
- 
++         '192a2ae51e12e2b1ddb6c21931174c34'
++	 '45d742ea3e27302b3f642e616173a570')
