@@ -1,12 +1,12 @@
 diff -aNur st/config.h st-bol/config.h
 --- st/config.h	2015-09-21 21:13:03.000000000 +0200
-+++ st-bol/config.h	2015-10-21 20:56:19.866973016 +0200
++++ st-bol/config.h	2015-10-22 00:26:52.130527953 +0200
 @@ -5,7 +5,7 @@
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
   */
 -static char font[] = "Liberation Mono:pixelsize=12:antialias=false:autohint=false";
-+static char font[] = "Consolas:pixelsize=12:antialias=true:autohinting=true";
++static char font[] = "Sauce Code Powerline:pixelsize=12:antialias=true:autohinting=false";
  static int borderpx = 2;
  static char shell[] = "/bin/sh";
  static char *utmp = NULL;
@@ -89,13 +89,13 @@ diff -aNur st/config.h st-bol/config.h
   * Colors used, when the specific fg == defaultfg. So in reverse mode this
 diff -aNur st/PKGBUILD st-bol/PKGBUILD
 --- st/PKGBUILD	2015-09-21 21:13:03.000000000 +0200
-+++ st-bol/PKGBUILD	2015-10-21 20:57:18.956341655 +0200
++++ st-bol/PKGBUILD	2015-10-22 00:27:09.983681726 +0200
 @@ -27,4 +27,4 @@
  	install -Dm644 README "$pkgdir/usr/share/doc/$pkgname/README"
  }
  md5sums=('1a926f450b4eacb7e2f5ac5b8ffea7c8'
 -         '90ce5919be96de000bd9d9429b173490')
-+         'cd90f3129db41a4e4ce063ea90c29147')
++         '192a2ae51e12e2b1ddb6c21931174c34')
 diff -aNur st/.SRCINFO st-bol/.SRCINFO
 --- st/.SRCINFO	2015-09-21 21:13:03.000000000 +0200
 +++ st-bol/.SRCINFO	2015-10-21 20:57:12.339745684 +0200
