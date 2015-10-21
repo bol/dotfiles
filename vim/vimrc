@@ -24,6 +24,11 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'bling/vim-airline'
+NeoBundle 'powerline/fonts', {
+\ 'build' : {
+\     'linux' : './install.sh',
+\    },
+\ }
 
 NeoBundle 'Syntastic'
 NeoBundle 'Valloric/YouCompleteMe', {
