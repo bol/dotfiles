@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DOTFILEDIR=$(cd $(dirname $0);pwd)
+
+function link_conf() {
+	source=$1
+	target=$2
+
+	[ -d $(dirname $2) ] || mkdir -p $(dirname $2)
+	[ -e $2 ] || ln -s $source $target
+}
+
+
+for script in "${DOTFILEDIR}"/*/install; do
+	[ -x "${script}" ] && source "${script}" $(dirname "${script}")
+done

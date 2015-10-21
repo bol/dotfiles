@@ -1,0 +1,1 @@
+link_conf $1/tmux.conf $HOME/.tmux.conf
