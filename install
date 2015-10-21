@@ -1,15 +1,24 @@
 #!/bin/bash
 
 DOTFILEDIR=$(cd $(dirname $0);pwd)
+sudo -k
 
 function link_conf() {
 	source=$1
 	target=$2
-
-	echo $target
+	sudo=$3
 
 	[ -d $(dirname $2) ] || mkdir -p $(dirname $2)
-	[ -e $2 ] || ln -s $source $target
+	[ -e $2 ] && return
+
+	if [ -z $sudo ]; then
+		echo "Installing ${target}"
+		ln -s $source $target
+	else
+		sudo -k
+		echo "Installing (sudo) ${target}"
+		sudo ln -s $source $target
+	fi
 }
 
 
