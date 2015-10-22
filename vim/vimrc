@@ -46,6 +46,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'majutsushi/tagbar'
+NeoBundle 'godlygeek/tabular'
 
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'rust-lang/rust.vim'
