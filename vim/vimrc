@@ -57,8 +57,8 @@ NeoBundle 'rodjek/vim-puppet', {
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'cespare/vim-toml'
-NeoBundleLazy 'jelera/vim-javascript-syntax', {'autoload':{'filetypes':['javascript']}}
-NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+NeoBundle 'jelera/vim-javascript-syntax'
+NeoBundle 'pangloss/vim-javascript'
 
 call neobundle#end()
 
