@@ -48,6 +48,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'godlygeek/tabular'
 
+NeoBundle 'rodjek/vim-puppet'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'cespare/vim-toml'
