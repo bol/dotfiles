@@ -48,7 +48,12 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'godlygeek/tabular'
 
-NeoBundle 'rodjek/vim-puppet'
+" vim-puppet helpfully craps all over tab settings
+NeoBundle 'rodjek/vim-puppet', {
+\ 'build' : {
+\     'linux' : 'rm -f ftplugin/puppet.vim',
+\    },
+\ }
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'cespare/vim-toml'
