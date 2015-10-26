@@ -47,6 +47,7 @@ NeoBundle 'sjl/gundo.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'godlygeek/tabular'
+NeoBundle 'Raimondi/delimitMate'
 
 " vim-puppet helpfully craps all over tab settings
 NeoBundle 'rodjek/vim-puppet', {
