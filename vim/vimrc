@@ -99,7 +99,12 @@ set shiftwidth=8         " spaces for autoindenting
 set smarttab             " <BS> removes shiftwidth worth of spaces
 set softtabstop=8        " spaces for editing, e.g. <Tab> or <BS>
 set tabstop=8            " spaces for <Tab>
-set list listchars=tab:❘-,trail:·,extends:»,precedes:«,nbsp:×  " display indentation guides
+set list listchars=
+	\tab:▸\ ,
+	\trail:·,
+	\extends:»,
+	\precedes:«,
+	\nbsp:×
 
 " Searches
 set hlsearch             " highlight search results
