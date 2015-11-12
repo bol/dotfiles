@@ -48,6 +48,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'Raimondi/delimitMate'
+NeoBundle 'Chiel92/vim-autoformat'
 
 " vim-puppet helpfully craps all over tab settings
 NeoBundle 'rodjek/vim-puppet', {
@@ -172,6 +173,10 @@ let g:airline_theme="solarized"
 nnoremap <C-p> :Unite -start-insert file_rec/async<CR>
 let g:unite_source_history_yank_enable = 1
 nnoremap <C-y> :Unite -start-insert history/yank<CR>
+
+" Autoformat
+" -----------------------------------------------------------------------------
+noremap <F3> :Autoformat<CR>
 
 " YouCompleteMe
 " -----------------------------------------------------------------------------
