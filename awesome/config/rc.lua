@@ -270,7 +270,10 @@ awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal
 awful.key({ modkey,           }, "d", function () awful.util.spawn("dolphin") end),
 awful.key({ modkey, "Control" }, "r", awesome.restart),
 awful.key({ modkey, "Shift"   }, "q", awesome.quit),
-awful.key({                   }, "Print",  function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'") end),
+awful.key({                   }, "Print",  function ()
+	awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'")
+	naughty.notify({ text = "Taking screenshot", timeout = 2 })
+end),
 awful.key({ modkey,           }, "s", function () awful.util.spawn(lock_cmd) end),
 
 -- Sound
