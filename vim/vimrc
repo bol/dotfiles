@@ -23,7 +23,8 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'bling/vim-airline'
+NeoBundle 'vim-airline/vim-airline'
+NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'powerline/fonts', {
 \ 'build' : {
 \     'linux' : './install.sh',
