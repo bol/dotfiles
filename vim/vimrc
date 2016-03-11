@@ -128,11 +128,6 @@ set history=10000
 " Clipboard
 set clipboard="autoselect,exclude=.*"
 
-" Hybrid line mode
-"set number
-"set relativenumber
-
-
 " gVim
 if has('gui_running')
 	set guioptions-=m               " remove menu
