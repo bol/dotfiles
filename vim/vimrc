@@ -138,9 +138,6 @@ if has('gui_running')
 	set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
 	set guifont=Sauce\ Code\ Powerline\ Normal\ 10
 	set lines=50 columns=100        " Initial size
-	" Paste from PRIMARY and CLIPBOARD
-	inoremap <silent> <M-v> <Esc>"+p`]a
-	inoremap <silent> <S-Insert> <Esc>"*p`]a
 endif
 
 " vimdiff
