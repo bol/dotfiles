@@ -94,7 +94,7 @@ let g:is_posix = 1
 " Folding
 set foldignore=          " don't ignore comments when folding
 set foldlevel=99         " open all folds by default
-set foldmethod=indent    " collapse code based on indent
+set foldmethod=syntax    " collapse code based on syntax
 
 " Tabs
 set autoindent           " copy indent from previous line
