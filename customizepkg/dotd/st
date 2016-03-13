@@ -5,7 +5,7 @@ diff -aNur st/config.h st-bol/config.h
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
   */
--static char font[] = "Liberation Mono:pixelsize=12:antialias=false:autohint=false";
+-static char font[] = "Fixed:pixelsize=18:antialias=false:autohint=false";
 +static char font[] = "Sauce Code Powerline:pixelsize=12:antialias=true:autohinting=false";
  static int borderpx = 2;
  static char shell[] = "/bin/sh";
@@ -105,25 +105,23 @@ diff -aNur st/no-bold-colors.diff st-bol/no-bold-colors.diff
 diff -aNur st/PKGBUILD st-bol/PKGBUILD
 --- st/PKGBUILD	2015-09-21 21:13:03.000000000 +0200
 +++ st-bol/PKGBUILD	2015-10-22 01:08:35.065305961 +0200
-@@ -11,11 +11,13 @@
+@@ -11,15 +11,18 @@
  makedepends=('ncurses')
  url="http://st.suckless.org"
  source=(http://dl.suckless.org/st/$pkgname-$pkgver.tar.gz
--        config.h)
-+        config.h
-+	no-bold-colors.diff)
- 
- build() {
++        no-bold-colors.diff
+         config.h)
+ md5sums=('1a926f450b4eacb7e2f5ac5b8ffea7c8'
+-         '06f5d56f754a918916d6c92df75e6d11')
++         '45d742ea3e27302b3f642e616173a570'
++         '192a2ae51e12e2b1ddb6c21931174c34')
+
+ prepare() {
    cd $srcdir/$pkgname-$pkgver
+   # skip terminfo which conflicts with nsurses
+   sed -i '/\@tic /d' Makefile
    cp $srcdir/config.h config.h
 +  patch < $srcdir/no-bold-colors.diff
- 	make X11INC=/usr/include/X11 X11LIB=/usr/lib/X11
  }
- 
-@@ -27,4 +29,5 @@
- 	install -Dm644 README "$pkgdir/usr/share/doc/$pkgname/README"
- }
- md5sums=('1a926f450b4eacb7e2f5ac5b8ffea7c8'
--         '90ce5919be96de000bd9d9429b173490')
-+         '192a2ae51e12e2b1ddb6c21931174c34'
-+	 '45d742ea3e27302b3f642e616173a570')
+
+ build() {
