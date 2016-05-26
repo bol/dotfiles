@@ -23,6 +23,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'tpope/vim-sensible'
+NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
@@ -187,10 +188,19 @@ map <C-u> :GundoToggle<CR>
 " Tagbar
 " -----------------------------------------------------------------------------
 nmap <C-t> :TagbarToggle<CR>
-
-" Tagbar
-" -----------------------------------------------------------------------------
 let g:rust_recommended_style = 0              "Leave my tabs alone
+let g:tagbar_type_groovy = {
+    \ 'ctagstype' : 'groovy',
+    \ 'kinds'     : [
+        \ 'p:package:1',
+        \ 'c:classes',
+        \ 'i:interfaces',
+        \ 't:traits',
+        \ 'e:enums',
+        \ 'm:methods',
+        \ 'f:fields:1'
+    \ ]
+\ }
 
 " Maps
 " -----------------------------------------------------------------------------
