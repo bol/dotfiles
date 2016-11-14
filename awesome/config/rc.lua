@@ -93,7 +93,7 @@ myawesomemenu = {
 mymainmenu = awful.menu({ items = {
 	{ "awesome", myawesomemenu, beautiful.awesome_icon },
 	{ "flow", "calligraflow" },
-	{ "0xdbe", "0xdbe" },
+	{ "datagrip", "datagrip" },
 	{ "sql-developer", "oracle-sqldeveloper" },
 	{ "open terminal", terminal },
 	{ "virt-manager", "virt-manager" }
