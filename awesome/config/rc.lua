@@ -8,7 +8,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
+local lain          = require("lain")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
 -- {{{ Error handling
@@ -39,6 +39,7 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-darker/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "st"
@@ -62,6 +63,13 @@ awful.layout.layouts = {
     awful.layout.suit.magnifier,
     awful.layout.suit.corner.nw,
 }
+-- }}}
+
+-- lain
+lain.layout.termfair.nmaster        = 3
+lain.layout.termfair.ncol           = 1
+lain.layout.termfair.center.nmaster = 3
+lain.layout.termfair.center.ncol    = 1
 -- }}}
 
 -- {{{ Helper functions
@@ -98,20 +106,66 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
                                     { "open terminal", terminal }
                                   }
                         })
+-- {{{ Wibox
+local markup = lain.util.markup
+local separators = lain.util.separators
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
+local clockicon = wibox.widget.imagebox(beautiful.widget_clock)
+local clock = lain.widgets.abase({
+    timeout  = 60,
+    cmd      = " date +'%a %d %b %R'",
+    settings = function()
+        widget:set_markup(" " .. output)
+    end
+})
 
--- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+-- MEM
+local memicon = wibox.widget.imagebox(beautiful.widget_mem)
+local mem = lain.widgets.mem({
+    settings = function()
+        widget:set_text(" " .. mem_now.used .. "MB ")
+    end
+})
+
+-- CPU
+local cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
+local cpu = lain.widgets.cpu({
+    settings = function()
+        widget:set_text(" " .. cpu_now.usage .. "% ")
+    end
+})
+
+-- / fs
+local fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
+local fsroot = lain.widgets.fs({
+    options  = "--exclude-type=tmpfs",
+    notification_preset = { fg = beautiful.fg_normal, bg = beautiful.bg_normal, font = "Terminus 10" },
+    settings = function()
+        widget:set_text(" " .. fs_now.used .. "% ")
+    end
+})
+
+-- Volume
+local volicon = wibox.widget.imagebox(beautiful.widget_vol)
+local volume = lain.widgets.pulseaudio({
+    settings = function()
+        vlevel = volume_now.left .. "-" .. volume_now.right .. "% | " .. volume_now.sink
+        if volume_now.muted == "yes" then
+            vlevel = vlevel .. " M"
+        end
+
+        widget:set_markup(lain.util.markup("#7493d2", vlevel))
+    end
+})
+
+-- Separators
+local spr     = wibox.widget.textbox(' ')
+local arrl_dl = separators.arrow_left(beautiful.bg_focus, "alpha")
+local arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
+
 -- }}}
 
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
-
 -- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock()
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = awful.util.table.join(
@@ -209,9 +263,22 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
             wibox.widget.systray(),
-            mytextclock,
+            spr,
+            arrl_dl,
+            memicon,
+            mem.widget,
+            arrl_ld,
+            wibox.container.background(cpuicon, beautiful.bg_focus),
+            wibox.container.background(cpu.widget, beautiful.bg_focus),
+            arrl_dl,
+            volicon,
+            volume,
+            arrl_ld,
+            wibox.container.background(fsicon, beautiful.bg_focus),
+            wibox.container.background(fsroot.widget, beautiful.bg_focus),
+            arrl_dl,
+            clock.widget,
             s.mylayoutbox,
         },
     }
@@ -333,10 +400,7 @@ globalkeys = awful.util.table.join(
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
                   }
               end,
-              {description = "lua execute prompt", group = "awesome"}),
-    -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+              {description = "lua execute prompt", group = "awesome"})
 )
 
 clientkeys = awful.util.table.join(
