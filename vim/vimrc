@@ -28,26 +28,27 @@ NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'powerline/fonts', {
-\ 'build' : {
-\     'linux' : './install.sh',
-\    },
-\ }
+      \ 'build' : {
+      \     'linux' : './install.sh',
+      \    },
+      \ }
 
 NeoBundle 'Syntastic'
 NeoBundle 'Valloric/YouCompleteMe', {
-\ 'build' : {
-\     'linux' : 'python2 install.py --system-libclang --system-boost --clang-completer',
-\    },
-\ }
+      \ 'build' : {
+      \     'linux' : 'python2 install.py --system-libclang --system-boost --clang-completer',
+      \    },
+      \ }
 
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'linux' : 'make',
-\    },
-\ }
+      \ 'build' : {
+      \     'linux' : 'make',
+      \    },
+      \ }
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tommcdo/vim-fubitive'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'Raimondi/delimitMate'
@@ -55,16 +56,19 @@ NeoBundle 'Chiel92/vim-autoformat'
 
 " vim-puppet helpfully craps all over tab settings
 NeoBundle 'rodjek/vim-puppet', {
-\ 'build' : {
-\     'linux' : 'rm -f ftplugin/puppet.vim',
-\    },
-\ }
+      \ 'build' : {
+      \     'linux' : 'rm -f ftplugin/puppet.vim',
+      \    },
+      \ }
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'cespare/vim-toml'
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'elzr/vim-json'
+NeoBundle 'JamshedVesuna/vim-markdown-preview'
+NeoBundle 'vim-pandoc/vim-pandoc'
+NeoBundle 'vim-pandoc/vim-pandoc-syntax'
 
 call neobundle#end()
 
@@ -99,17 +103,17 @@ set foldmethod=syntax    " collapse code based on syntax
 
 " Tabs
 set autoindent           " copy indent from previous line
-set noexpandtab          " replace tabs with spaces
-set shiftwidth=8         " spaces for autoindenting
+set expandtab          " replace tabs with spaces
+set shiftwidth=2         " spaces for autoindenting
 set smarttab             " <BS> removes shiftwidth worth of spaces
-set softtabstop=8        " spaces for editing, e.g. <Tab> or <BS>
-set tabstop=8            " spaces for <Tab>
+set softtabstop=2        " spaces for editing, e.g. <Tab> or <BS>
+set tabstop=2            " spaces for <Tab>
 set list listchars=
-	\tab:▸\ ,
-	\trail:·,
-	\extends:»,
-	\precedes:«,
-	\nbsp:×
+      \tab:▸\ ,
+      \trail:·,
+      \extends:»,
+      \precedes:«,
+      \nbsp:×
 
 " Searches
 set hlsearch             " highlight search results
@@ -131,19 +135,19 @@ set clipboard="autoselect,exclude=.*"
 
 " gVim
 if has('gui_running')
-	set guioptions-=m               " remove menu
-	set guioptions-=T               " remove toolbar
-	set guioptions-=r               " remove right scrollbar
-	set guioptions-=b               " remove bottom scrollbar
-	set guioptions-=L               " remove left scrollbar
-	set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
-	set guifont=Sauce\ Code\ Powerline\ Normal\ 10
-	set lines=50 columns=100        " Initial size
+  set guioptions-=m               " remove menu
+  set guioptions-=T               " remove toolbar
+  set guioptions-=r               " remove right scrollbar
+  set guioptions-=b               " remove bottom scrollbar
+  set guioptions-=L               " remove left scrollbar
+  set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
+  set guifont=Sauce\ Code\ Powerline\ Normal\ 10
+  set lines=50 columns=100        " Initial size
 endif
 
 " vimdiff
 if &diff
-	set diffopt=filler,foldcolumn:0
+  set diffopt=filler,foldcolumn:0
 endif
 
 " indenting
@@ -157,6 +161,33 @@ set ls=2
 " -----------------------------------------------------------------------------
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_ruby_rubylint_exec = '/home/bol/bin/ruby-lint'
+let g:syntastic_ruby_rubocop_exec = '/home/bol/bin/rubocop'
+let g:syntastic_ruby_checkers = ['mri', 'rubocop', 'rubylint']
+let g:syntastic_quiet_messages = { "type": "style" }
+
+let g:enable_style_warnings= 0
+function! ToggleStyleWarnings()
+  if g:enable_style_warnings
+    let g:syntastic_quiet_messages = { "type": "style" }
+    let g:enable_style_warnings=0
+    call SyntasticCheck()
+  else
+    let g:syntastic_quiet_messages = {}
+    let g:enable_style_warnings=0
+    call SyntasticCheck()
+  endif
+endfunction
+
+nnoremap <A-Up> :lprev<CR>
+nnoremap <A-Down> :lnext<CR>
+nnoremap <A-s> :call ToggleStyleWarnings()<CR>
 
 " Airline
 " -----------------------------------------------------------------------------
@@ -198,40 +229,46 @@ map <C-u> :GundoToggle<CR>
 nmap <C-t> :TagbarToggle<CR>
 let g:rust_recommended_style = 0              "Leave my tabs alone
 let g:tagbar_type_groovy = {
-    \ 'ctagstype' : 'groovy',
-    \ 'kinds'     : [
-        \ 'p:package:1',
-        \ 'c:classes',
-        \ 'i:interfaces',
-        \ 't:traits',
-        \ 'e:enums',
-        \ 'm:methods',
-        \ 'f:fields:1'
-    \ ]
-\ }
+      \ 'ctagstype' : 'groovy',
+      \ 'kinds'     : [
+      \ 'p:package:1',
+      \ 'c:classes',
+      \ 'i:interfaces',
+      \ 't:traits',
+      \ 'e:enums',
+      \ 'm:methods',
+      \ 'f:fields:1'
+      \ ]
+      \ }
+
+" Markdown-preview
+" -----------------------------------------------------------------------------
+let vim_markdown_preview_use_xdg_open=1
+let vim_markdown_preview_github=1
+
+let vim_markdown_preview_hotkey='<C-p>'
+
 
 " Maps
 " -----------------------------------------------------------------------------
-map <leader>jc :cnext<CR>
-map <leader>jl :lnext<CR>
 
 " Toggle Vexplore with Ctrl-E
 function! ToggleVExplorer()
   if exists("t:expl_buf_num")
-      let expl_win_num = bufwinnr(t:expl_buf_num)
-      if expl_win_num != -1
-          let cur_win_nr = winnr()
-          exec expl_win_num . 'wincmd w'
-          close
-          exec cur_win_nr . 'wincmd w'
-          unlet t:expl_buf_num
-      else
-          unlet t:expl_buf_num
-      endif
+    let expl_win_num = bufwinnr(t:expl_buf_num)
+    if expl_win_num != -1
+      let cur_win_nr = winnr()
+      exec expl_win_num . 'wincmd w'
+      close
+      exec cur_win_nr . 'wincmd w'
+      unlet t:expl_buf_num
+    else
+      unlet t:expl_buf_num
+    endif
   else
-      exec '1wincmd w'
-      Vexplore
-      let t:expl_buf_num = bufnr("%")
+    exec '1wincmd w'
+    Vexplore
+    let t:expl_buf_num = bufnr("%")
   endif
 endfunction
 " Hit enter in the file browser to open the selected
@@ -261,3 +298,6 @@ nnoremap <space>gb :Git branch<Space>
 nnoremap <space>go :Git checkout<Space>
 nnoremap <space>gps :Dispatch! git push<CR>
 nnoremap <space>gpl :Dispatch! git pull<CR>
+
+" fugitive
+let g:fugitive_bitbucket_domains = ['scm.prod.nordnet.se']
