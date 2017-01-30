@@ -211,3 +211,25 @@ function purge-ssh {
 			remove($1)
 		}'
 }
+
+export PATH="$HOME/.local/bin/:$PATH"
+
+# SDKMan
+if [[ -x "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+  export SDKMAN_DIR="/home/bol/.sdkman"
+  source "/home/bol/.sdkman/bin/sdkman-init.sh"
+fi
+
+# Rbenv
+if [[ -x "$HOME/.rbenv/bin/rbenv" ]]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
+
+# Pyenv
+if [[ -x "$HOME/.pyenv/bin/pyenv" ]]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
