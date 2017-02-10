@@ -147,16 +147,7 @@ local fsroot = lain.widgets.fs({
 
 -- Volume
 local volicon = wibox.widget.imagebox(beautiful.widget_vol)
-local volume = lain.widgets.pulseaudio({
-    settings = function()
-        vlevel = volume_now.left .. "-" .. volume_now.right .. "% | " .. volume_now.sink
-        if volume_now.muted == "yes" then
-            vlevel = vlevel .. " M"
-        end
-
-        widget:set_markup(lain.util.markup("#7493d2", vlevel))
-    end
-})
+local volume = lain.widgets.pulsebar()
 
 -- Separators
 local spr     = wibox.widget.textbox(' ')
@@ -265,20 +256,20 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             spr,
-            arrl_dl,
-            memicon,
-            mem.widget,
             arrl_ld,
             wibox.container.background(cpuicon, beautiful.bg_focus),
             wibox.container.background(cpu.widget, beautiful.bg_focus),
             arrl_dl,
-            volicon,
-            volume,
+            memicon,
+            mem.widget,
             arrl_ld,
             wibox.container.background(fsicon, beautiful.bg_focus),
             wibox.container.background(fsroot.widget, beautiful.bg_focus),
             arrl_dl,
-            clock.widget,
+            volicon,
+            volume.bar,
+            arrl_ld,
+            wibox.container.background(clock.widget, beautiful.bg_focus),
             s.mylayoutbox,
         },
     }
@@ -348,7 +339,7 @@ globalkeys = awful.util.table.join(
         {description = "go back", group = "client"}),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal .. " -e tmux") end,
+    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
