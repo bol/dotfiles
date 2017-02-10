@@ -1,100 +1,50 @@
 "
 " ~/.vimrc
 "
-" Compatibility
-" -----------------------------------------------------------------------------
-set nocompatible         " use vim defaults instead of vi
-set nomodeline           " prevent possible security holes
-if has("multi_byte")
-  if &termencoding == ""
-    let &termencoding = &encoding
-  endif
-  set encoding=utf-8
-  setglobal fileencoding=utf-8
-  "setglobal bomb
-  set fileencodings=ucs-bom,utf-8,latin1
-endif
-
 " Install Plugins
 " -----------------------------------------------------------------------------
-filetype off
-set runtimepath+=~/.vim/bundle/neobundle.vim/
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
+call plug#begin()
+" Theme and look
+Plug 'tpope/vim-sensible'
+Plug 'altercation/vim-colors-solarized'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'powerline/fonts', { 'do' : './install.sh' }
+Plug 'majutsushi/tagbar'
 
-NeoBundle 'tpope/vim-sensible'
-NeoBundle 'tpope/vim-dispatch'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'vim-airline/vim-airline'
-NeoBundle 'vim-airline/vim-airline-themes'
-NeoBundle 'powerline/fonts', {
-      \ 'build' : {
-      \     'linux' : './install.sh',
-      \    },
-      \ }
+" General
+Plug 'vim-syntastic/syntastic'
+Plug 'Valloric/YouCompleteMe',
+            \ { 'do' : 'python2 install.py --system-libclang --system-boost --clang-completer' }
+Plug 'sjl/gundo.vim'
+Plug 'godlygeek/tabular'
+Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-dispatch'
 
-NeoBundle 'Syntastic'
-NeoBundle 'Valloric/YouCompleteMe', {
-      \ 'build' : {
-      \     'linux' : 'python2 install.py --system-libclang --system-boost --clang-completer',
-      \    },
-      \ }
+" Git
+Plug 'tpope/vim-fugitive'
+Plug 'tommcdo/vim-fubitive'
 
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'linux' : 'make',
-      \    },
-      \ }
-NeoBundle 'sjl/gundo.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tommcdo/vim-fubitive'
-NeoBundle 'majutsushi/tagbar'
-NeoBundle 'godlygeek/tabular'
-NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'Chiel92/vim-autoformat'
-
-" vim-puppet helpfully craps all over tab settings
-NeoBundle 'rodjek/vim-puppet', {
-      \ 'build' : {
-      \     'linux' : 'rm -f ftplugin/puppet.vim',
-      \    },
-      \ }
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'rust-lang/rust.vim'
-NeoBundle 'cespare/vim-toml'
-NeoBundle 'jelera/vim-javascript-syntax'
-NeoBundle 'pangloss/vim-javascript'
-NeoBundle 'elzr/vim-json'
-NeoBundle 'JamshedVesuna/vim-markdown-preview'
-NeoBundle 'vim-pandoc/vim-pandoc'
-NeoBundle 'vim-pandoc/vim-pandoc-syntax'
-
-call neobundle#end()
+" Languages and formats
+Plug 'rodjek/vim-puppet'
+Plug 'vim-ruby/vim-ruby'
+Plug 'rust-lang/rust.vim'
+Plug 'cespare/vim-toml'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'pangloss/vim-javascript'
+Plug 'elzr/vim-json'
+Plug 'chase/vim-ansible-yaml'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+call plug#end()
 
 " Settings
 " -----------------------------------------------------------------------------
-" File detection
-filetype plugin indent on
-syntax on
 
 " General
-set backspace=2          " enable <BS> for everything
-"set colorcolumn=80       " visual indicator of column
-set completeopt-=preview " dont show preview window
-set laststatus=2         " always show status line
-set lazyredraw           " don't update screen when executing macros
-set nowrap               " disable word wrap
-set scrolloff=10         " cut off lines when scrolling up and down
-set showcmd              " show command on last line of screen
-set showmatch            " show bracket matches
-set spelllang=en_GB      " spell check with English English
-set textwidth=0          " don't break lines after some maximum width
-set title                " use filename in window title
-set wildmenu             " enhanced cmd line completion
 set hidden               " hide buffer instead of closing on switch
 set mouse-=a             " don't go to visual mode on mouse click
-let g:is_posix = 1
 
 " Folding
 set foldignore=          " don't ignore comments when folding
@@ -102,22 +52,16 @@ set foldlevel=99         " open all folds by default
 set foldmethod=syntax    " collapse code based on syntax
 
 " Tabs
-set autoindent           " copy indent from previous line
-set expandtab          " replace tabs with spaces
-set shiftwidth=2         " spaces for autoindenting
-set smarttab             " <BS> removes shiftwidth worth of spaces
-set softtabstop=2        " spaces for editing, e.g. <Tab> or <BS>
-set tabstop=2            " spaces for <Tab>
+set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
 set list listchars=
-      \tab:▸\ ,
-      \trail:·,
-      \extends:»,
-      \precedes:«,
-      \nbsp:×
+            \tab:▸\ ,
+            \trail:·,
+            \extends:»,
+            \precedes:«,
+            \nbsp:×
 
 " Searches
 set hlsearch             " highlight search results
-set incsearch            " search whilst typing
 set ignorecase           " case insensitive searching
 set smartcase            " override ignorecase if upper case typed
 
@@ -127,38 +71,27 @@ let g:solarized_termcolors=256
 set background=dark
 colorscheme solarized
 
-" history
-set history=10000
-
-" Clipboard
-set clipboard="autoselect,exclude=.*"
-
 " gVim
 if has('gui_running')
-  set guioptions-=m               " remove menu
-  set guioptions-=T               " remove toolbar
-  set guioptions-=r               " remove right scrollbar
-  set guioptions-=b               " remove bottom scrollbar
-  set guioptions-=L               " remove left scrollbar
-  set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
-  set guifont=Sauce\ Code\ Powerline\ Normal\ 10
-  set lines=50 columns=100        " Initial size
+    set guioptions-=m               " remove menu
+    set guioptions-=T               " remove toolbar
+    set guioptions-=r               " remove right scrollbar
+    set guioptions-=b               " remove bottom scrollbar
+    set guioptions-=L               " remove left scrollbar
+    set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
+    set guifont=Sauce\ Code\ Powerline\ Normal\ 10
+    set lines=50 columns=100        " Initial size
 endif
 
 " vimdiff
 if &diff
-  set diffopt=filler,foldcolumn:0
+    set diffopt=filler,foldcolumn:0
 endif
 
-" indenting
-set cindent
-set smartindent
-set ls=2
-
 " Plugin settings
+" -----------------------------------------------------------------------------
 
 " Syntastic
-" -----------------------------------------------------------------------------
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
@@ -167,6 +100,9 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_aggregate_errors = 1
 
+let g:syntastic_java_checkers=['javac']
+let g:syntastic_java_javac_config_file_enabled = 1
+
 let g:syntastic_ruby_rubylint_exec = '/home/bol/bin/ruby-lint'
 let g:syntastic_ruby_rubocop_exec = '/home/bol/bin/rubocop'
 let g:syntastic_ruby_checkers = ['mri', 'rubocop', 'rubylint']
@@ -174,15 +110,15 @@ let g:syntastic_quiet_messages = { "type": "style" }
 
 let g:enable_style_warnings= 0
 function! ToggleStyleWarnings()
-  if g:enable_style_warnings
-    let g:syntastic_quiet_messages = { "type": "style" }
-    let g:enable_style_warnings=0
-    call SyntasticCheck()
-  else
-    let g:syntastic_quiet_messages = {}
-    let g:enable_style_warnings=0
-    call SyntasticCheck()
-  endif
+    if g:enable_style_warnings
+        let g:syntastic_quiet_messages = { "type": "style" }
+        let g:enable_style_warnings=0
+        call SyntasticCheck()
+    else
+        let g:syntastic_quiet_messages = {}
+        let g:enable_style_warnings=0
+        call SyntasticCheck()
+    endif
 endfunction
 
 nnoremap <A-Up> :lprev<CR>
@@ -190,7 +126,6 @@ nnoremap <A-Down> :lnext<CR>
 nnoremap <A-s> :call ToggleStyleWarnings()<CR>
 
 " Airline
-" -----------------------------------------------------------------------------
 let g:airline_powerline_fonts=1
 let g:airline_theme="solarized"
 " Enable the list of buffers
@@ -202,16 +137,17 @@ nnoremap <A-Right> :bnext<CR>
 nnoremap <A-Left> :bprev<CR>
 nnoremap <A-d> :bdelete<CR>
 
-
-" Unite
+" delimitMate
 " -----------------------------------------------------------------------------
-nnoremap <C-p> :Unite -start-insert file_rec/async<CR>
-let g:unite_source_history_yank_enable = 1
-nnoremap <C-y> :Unite -start-insert history/yank<CR>
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
 
-" Autoformat
+" vim-ansible-yaml
 " -----------------------------------------------------------------------------
-noremap <F3> :Autoformat<CR>
+let g:ansible_options = {
+            \ 'ignore_blank_lines' : 0,
+            \ 'documentation_mapping' : '<C-K>'
+            \ }
 
 " YouCompleteMe
 " -----------------------------------------------------------------------------
@@ -227,19 +163,18 @@ map <C-u> :GundoToggle<CR>
 " Tagbar
 " -----------------------------------------------------------------------------
 nmap <C-t> :TagbarToggle<CR>
-let g:rust_recommended_style = 0              "Leave my tabs alone
 let g:tagbar_type_groovy = {
-      \ 'ctagstype' : 'groovy',
-      \ 'kinds'     : [
-      \ 'p:package:1',
-      \ 'c:classes',
-      \ 'i:interfaces',
-      \ 't:traits',
-      \ 'e:enums',
-      \ 'm:methods',
-      \ 'f:fields:1'
-      \ ]
-      \ }
+            \ 'ctagstype' : 'groovy',
+            \ 'kinds'     : [
+            \ 'p:package:1',
+            \ 'c:classes',
+            \ 'i:interfaces',
+            \ 't:traits',
+            \ 'e:enums',
+            \ 'm:methods',
+            \ 'f:fields:1'
+            \ ]
+            \ }
 
 " Markdown-preview
 " -----------------------------------------------------------------------------
@@ -254,22 +189,22 @@ let vim_markdown_preview_hotkey='<C-p>'
 
 " Toggle Vexplore with Ctrl-E
 function! ToggleVExplorer()
-  if exists("t:expl_buf_num")
-    let expl_win_num = bufwinnr(t:expl_buf_num)
-    if expl_win_num != -1
-      let cur_win_nr = winnr()
-      exec expl_win_num . 'wincmd w'
-      close
-      exec cur_win_nr . 'wincmd w'
-      unlet t:expl_buf_num
+    if exists("t:expl_buf_num")
+        let expl_win_num = bufwinnr(t:expl_buf_num)
+        if expl_win_num != -1
+            let cur_win_nr = winnr()
+            exec expl_win_num . 'wincmd w'
+            close
+            exec cur_win_nr . 'wincmd w'
+            unlet t:expl_buf_num
+        else
+            unlet t:expl_buf_num
+        endif
     else
-      unlet t:expl_buf_num
+        exec '1wincmd w'
+        Vexplore
+        let t:expl_buf_num = bufnr("%")
     endif
-  else
-    exec '1wincmd w'
-    Vexplore
-    let t:expl_buf_num = bufnr("%")
-  endif
 endfunction
 " Hit enter in the file browser to open the selected
 " file with :vsplit to the right of the browser.
