@@ -111,7 +111,7 @@ local markup = lain.util.markup
 local separators = lain.util.separators
 
 local clockicon = wibox.widget.imagebox(beautiful.widget_clock)
-local clock = lain.widgets.abase({
+local clock = lain.widget.watch({
     timeout  = 60,
     cmd      = " date +'%a %d %b %R'",
     settings = function()
@@ -121,7 +121,7 @@ local clock = lain.widgets.abase({
 
 -- MEM
 local memicon = wibox.widget.imagebox(beautiful.widget_mem)
-local mem = lain.widgets.mem({
+local mem = lain.widget.mem({
     settings = function()
         widget:set_text(" " .. mem_now.used .. "MB ")
     end
@@ -129,7 +129,7 @@ local mem = lain.widgets.mem({
 
 -- CPU
 local cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
-local cpu = lain.widgets.cpu({
+local cpu = lain.widget.cpu({
     settings = function()
         widget:set_text(" " .. cpu_now.usage .. "% ")
     end
@@ -137,7 +137,7 @@ local cpu = lain.widgets.cpu({
 
 -- / fs
 local fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
-local fsroot = lain.widgets.fs({
+local fsroot = lain.widget.fs({
     options  = "--exclude-type=tmpfs",
     notification_preset = { fg = beautiful.fg_normal, bg = beautiful.bg_normal, font = "Terminus 10" },
     settings = function()
@@ -147,7 +147,7 @@ local fsroot = lain.widgets.fs({
 
 -- Volume
 local volicon = wibox.widget.imagebox(beautiful.widget_vol)
-local volume = lain.widgets.pulsebar()
+local volume = lain.widget.pulsebar()
 
 -- Separators
 local spr     = wibox.widget.textbox(' ')
