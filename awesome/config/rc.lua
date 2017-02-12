@@ -267,7 +267,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.container.background(fsroot.widget, beautiful.bg_focus),
             arrl_dl,
             volicon,
-            volume.bar,
+            volume.widget,
             arrl_ld,
             wibox.container.background(clock.widget, beautiful.bg_focus),
             s.mylayoutbox,
