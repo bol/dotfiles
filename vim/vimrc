@@ -23,7 +23,6 @@ Plug 'tpope/vim-dispatch'
 
 " Git
 Plug 'tpope/vim-fugitive'
-Plug 'tommcdo/vim-fubitive'
 
 " Languages and formats
 Plug 'rodjek/vim-puppet'
