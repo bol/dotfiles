@@ -27,6 +27,8 @@ Plug 'tpope/vim-fugitive'
 " Languages and formats
 Plug 'rodjek/vim-puppet'
 Plug 'vim-ruby/vim-ruby'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'vim-scripts/groovyindent-unix'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'jelera/vim-javascript-syntax'
