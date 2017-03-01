@@ -42,7 +42,7 @@ beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-darker/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "st"
+terminal = "st -e tmux"
 editor = "vim"
 editor_cmd = "gvim"
 lock_cmd = 'slock'
