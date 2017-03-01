@@ -26,56 +26,11 @@ colors
 # Cache for completions
 zstyle ':completion::complete:*' use-cache 1
 
+if [[ -f /usr/share/git/completion/git-prompt.sh ]]; then
+    source /usr/share/git/completion/git-prompt.sh
+    HAVE_GIT=1
+fi
 function precmd {
-    # let's get the current get branch that we are under
-    # ripped from /etc/bash_completion.d/git from the git devs
-    git_ps1 () {
-        if which git &> /dev/null; then
-            local g="$(git rev-parse --git-dir 2>/dev/null)"
-            if [ -n "$g" ]; then
-                local r
-                local b
-                if [ -d "$g/rebase-apply" ]; then
-                    if test -f "$g/rebase-apply/rebasing"; then
-                        r="|REBASE"
-                    elif test -f "$g/rebase-apply/applying"; then
-                        r="|AM"
-                    else
-                        r="|AM/REBASE"
-                    fi
-                    b="$(git symbolic-ref HEAD 2>/dev/null)"
-                elif [ -f "$g/rebase-merge/interactive" ]; then
-                    r="|REBASE-i"
-                    b="$(cat "$g/rebase-merge/head-name")"
-                elif [ -d "$g/rebase-merge" ]; then
-                    r="|REBASE-m"
-                    b="$(cat "$g/rebase-merge/head-name")"
-                elif [ -f "$g/MERGE_HEAD" ]; then
-                    r="|MERGING"
-                    b="$(git symbolic-ref HEAD 2>/dev/null)"
-                else
-                    if [ -f "$g/BISECT_LOG" ]; then
-                        r="|BISECTING"
-                    fi
-                    if ! b="$(git symbolic-ref HEAD 2>/dev/null)"; then
-                       if ! b="$(git describe --exact-match HEAD 2>/dev/null)"; then
-                          b="$(cut -c1-7 "$g/HEAD")..."
-                       fi
-                    fi
-                fi
-                if [ -n "$1" ]; then
-                     printf "$1" "${b##refs/heads/}$r"
-                else
-                     printf "%s" " G:${b##refs/heads/}$r"
-                fi
-            fi
-        else
-            printf ""
-        fi
-    }
-
-    PR_GIT="$(git_ps1)"
-
     # The following 9 lines of code comes directly from Phil!'s ZSH prompt
     # http://aperiodic.net/phil/prompt/
     local TERMWIDTH
@@ -88,13 +43,6 @@ function precmd {
 	(( PR_PWDLEN = $TERMWIDTH - $PROMPTSIZE ))
     fi
 
-    # set a simple variable to show when in screen
-    if [[ -n "${WINDOW}" ]]; then
-        PR_SCREEN=" S:${WINDOW}"
-    else
-        PR_SCREEN=""
-    fi
-
     # check if jobs are executing
     if [[ $(jobs | wc -l) -gt 0 ]]; then
         PR_JOBS=" J:%j"
@@ -102,15 +50,14 @@ function precmd {
         PR_JOBS=""
     fi
 
-    if [[ -f ~/.mcabber/unread.status ]]; then
-        NCHAT="$(awk '{UNREAD=$1} END{print UNREAD}' ~/.mcabber/unread.status)"
+    # git support
+    if [[ ${HAVE_GIT} ]]; then
+        GIT_PS1_SHOWDIRTYSTATE=1
+        GIT_PS1_SHOWUNTRACKEDFILES=1
+        GIT_PS1_SHOWSTASHSTATE=1
+        PR_GIT="$(__git_ps1)"
     else
-        NCHAT="0"
-    fi
-    if [[ $NCHAT -gt 0 ]]; then
-            PR_CHAT=" C:$NCHAT"
-    else
-            PR_CHAT=""
+        PR_GIT=""
     fi
 }
 
@@ -138,7 +85,7 @@ setprompt () {
 
 ${PR_BOLD_RED}<${PR_RED}<${PR_BOLD_BLACK}<\
 ${PR_BOLD_GREY} %n@%m${PR_RED}!${PR_BOLD_WHITE}${PR_BOLD_RED}\
-%(?.. E:%?)${PR_BOLD_BLUE}${PR_SCREEN}${PR_JOBS}${PR_CHAT}${PR_GIT}${PR_BOLD_CYAN}\
+%(?.. E:%?)${PR_BOLD_BLUE}${PR_JOBS}${PR_GIT}${PR_BOLD_CYAN}\
 
 ${PR_BOLD_BLACK}>${PR_GREEN}>${PR_BOLD_GREEN}>\
 %{${reset_color}%} '
