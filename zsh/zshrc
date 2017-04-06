@@ -52,10 +52,11 @@ function precmd {
 
     # git support
     if [[ ${HAVE_GIT} ]]; then
-        GIT_PS1_SHOWDIRTYSTATE=1
-        GIT_PS1_SHOWUNTRACKEDFILES=1
-        GIT_PS1_SHOWSTASHSTATE=1
+        GIT_PS1_SHOWDIRTYSTATE=true
+        GIT_PS1_SHOWUNTRACKEDFILES=true
+        GIT_PS1_SHOWSTASHSTATE=true
         GIT_PS1_SHOWUPSTREAM="auto"
+        GIT_PS1_SHOWCOLORHINTS=true
         PR_GIT="$(__git_ps1)"
     else
         PR_GIT=""
