@@ -40,7 +40,7 @@ function precmd {
     local PWDSIZE=${#${(%):-%~}}
 
     if [[ "$PROMPTSIZE + $PWDSIZE" -gt $TERMWIDTH ]]; then
-	(( PR_PWDLEN = $TERMWIDTH - $PROMPTSIZE ))
+        (( PR_PWDLEN = $TERMWIDTH - $PROMPTSIZE ))
     fi
 
     # check if jobs are executing
@@ -82,7 +82,8 @@ setprompt () {
     done
 
     # Finally, let's set the prompt
-    PROMPT='${PR_BOLD_RED}<${PR_RED}<${PR_BOLD_BLACK}<${PR_BOLD_GREY} \
+    PROMPT='\
+${PR_BOLD_RED}<${PR_RED}<${PR_BOLD_BLACK}<${PR_BOLD_GREY} \
 %D{%R.%S %a %b %d %Y}${PR_RED}!${PR_BOLD_WHITE}%${PR_PWDLEN}<...<%~%<< \
 
 ${PR_BOLD_RED}<${PR_RED}<${PR_BOLD_BLACK}<\
@@ -109,11 +110,11 @@ bindkey '^[[B' history-search-forward
 
 DIRSTACKFILE="$HOME/.cache/zsh/dirs"
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
-  dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
-  [[ -d $dirstack[1] ]] && cd $dirstack[1]
+    dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
+    [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
 chpwd() {
-  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
+    print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
 }
 
 DIRSTACKSIZE=20
@@ -136,7 +137,7 @@ unset GPG_AGENT_INFO
 
 # Syntax highlightning
 if [ -r /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-	source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 # Aliases and functions for the shell
@@ -146,39 +147,39 @@ alias nmap-traceroute="sudo nmap -sn -Pn --traceroute --reason"
 alias ssh="TERM=xterm-256color ssh"
 
 function purge-ssh {
-	host=$1
-	getent hosts $host|awk -v host=$host '
-		function remove(entry) {
-			printf "Removing %s\n", entry
-			cmd=sprintf("ssh-keygen -f ~/.ssh/known_hosts -R %s 2>/dev/null", entry)
-			system(cmd)
-		}
+    host=$1
+    getent hosts $host|awk -v host=$host '
+    function remove(entry) {
+        printf "Removing %s\n", entry
+        cmd=sprintf("ssh-keygen -f ~/.ssh/known_hosts -R %s 2>/dev/null", entry)
+        system(cmd)
+    }
 
-		{
-			remove(host)
-			remove($2)
-			remove($1)
-		}'
+    {
+        remove(host)
+        remove($2)
+        remove($1)
+    }'
 }
 
 export PATH="$HOME/.local/bin/:$PATH"
 
 # SDKMan
 if [[ -x "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
-  export SDKMAN_DIR="/home/bol/.sdkman"
-  source "/home/bol/.sdkman/bin/sdkman-init.sh"
+    export SDKMAN_DIR="/home/bol/.sdkman"
+    source "/home/bol/.sdkman/bin/sdkman-init.sh"
 fi
 
 # Rbenv
 if [[ -x "$HOME/.rbenv/bin/rbenv" ]]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
 fi
 
 # Pyenv
 if [[ -x "$HOME/.pyenv/bin/pyenv" ]]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 fi
