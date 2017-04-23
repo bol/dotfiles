@@ -81,7 +81,7 @@ if has('gui_running')
     set guioptions-=b               " remove bottom scrollbar
     set guioptions-=L               " remove left scrollbar
     set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
-    set guifont=Sauce\ Code\ Powerline\ Normal\ 10
+    set guifont=Source\ Code\ Pro\ for\ Powerline
     set lines=50 columns=100        " Initial size
 endif
 
