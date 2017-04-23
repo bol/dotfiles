@@ -7,8 +7,8 @@ function link_conf() {
 	target=$2
 	sudo=$3
 
-	[ -d $(dirname $2) ] || mkdir -p $(dirname $2)
-	[ -e $2 ] && return
+	[ -d $(dirname $target) ] || mkdir -p $(dirname $target)
+	[ -e $target ] && return
 
 	if [ -z $sudo ]; then
 		echo "Installing ${target}"
