@@ -20,6 +20,7 @@ Plug 'sjl/gundo.vim'
 Plug 'godlygeek/tabular'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-dispatch'
+Plug 'will133/vim-dirdiff'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -86,7 +87,10 @@ endif
 
 " vimdiff
 if &diff
-    set diffopt=filler,foldcolumn:0
+    set lines=60 columns=184
+    set foldminlines=99999
+    set nomodifiable
+    set nowrite
 endif
 
 " Plugin settings
