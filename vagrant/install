@@ -1,0 +1,1 @@
+link_conf $1/Vagrantfile $HOME/.vagrant.d/Vagrantfile
