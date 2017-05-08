@@ -111,12 +111,9 @@ local markup = lain.util.markup
 local separators = lain.util.separators
 
 local clockicon = wibox.widget.imagebox(beautiful.widget_clock)
-local clock = lain.widget.watch({
-    timeout  = 60,
-    cmd      = " date +'%a %d %b %R'",
-    settings = function()
-        widget:set_markup(" " .. output)
-    end
+local clock = wibox.widget.textclock()
+lain.widget.calendar({
+    attach_to = { clock },
 })
 
 -- MEM
@@ -269,7 +266,7 @@ awful.screen.connect_for_each_screen(function(s)
             volicon,
             volume.widget,
             arrl_ld,
-            wibox.container.background(clock.widget, beautiful.bg_focus),
+            wibox.container.background(clock, beautiful.bg_focus),
             s.mylayoutbox,
         },
     }
