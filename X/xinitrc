@@ -1,5 +1,8 @@
 [[ -d $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
 xset -b
+# Workaround Xorgs DPI bug where dpi is always set to 96
+# solution from https://bugs.freedesktop.org/show_bug.cgi?id=23705#c10 , despite it
+xrandr --fbmm `xrandr | sed -n '/ connected / {s/.* \([0-9]\+\)mm x \([0-9]\+\)mm/\1x\2/p;q}'`
 wmname Awesome
 [[ -f $HOME/.Xresources ]] && xrdb -merge ~/.Xresources
 
