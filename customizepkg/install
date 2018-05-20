@@ -1,1 +1,0 @@
-link_conf $1/dotd /etc/customizepkg.d true
