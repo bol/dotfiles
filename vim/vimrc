@@ -16,7 +16,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-eunuch'
 Plug 'vim-syntastic/syntastic'
 Plug 'Valloric/YouCompleteMe',
-            \ { 'do' : 'python2 install.py --system-libclang --system-boost --clang-completer' }
+            \ { 'do' : 'python2 install.py --system-libclang --system-boost --clang-completer --rust-completer --java-completer' }
 Plug 'sjl/gundo.vim'
 Plug 'godlygeek/tabular'
 Plug 'Raimondi/delimitMate'
@@ -27,15 +27,12 @@ Plug 'will133/vim-dirdiff'
 Plug 'tpope/vim-fugitive'
 
 " Languages and formats
-Plug 'rodjek/vim-puppet'
+Plug 'cespare/vim-toml'
+Plug 'elzr/vim-json'
 Plug 'vim-ruby/vim-ruby'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'rust-lang/rust.vim'
-Plug 'cespare/vim-toml'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'pangloss/vim-javascript'
-Plug 'elzr/vim-json'
 Plug 'chase/vim-ansible-yaml'
 Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'vim-pandoc/vim-pandoc'
