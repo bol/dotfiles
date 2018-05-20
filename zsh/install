@@ -1,2 +1,4 @@
+link_conf $1/zshenv $HOME/.zshenv
 link_conf $1/zshrc $HOME/.zshrc
 link_conf $1/zlogout $HOME/.zlogout
+link_conf $1/zsh.d $HOME/.zsh.d

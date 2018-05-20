@@ -1,0 +1,2 @@
+setopt rmstarsilent
+setopt nobeep
