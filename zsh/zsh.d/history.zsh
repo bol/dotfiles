@@ -1,5 +1,7 @@
 HISTFILE=~/.histfile
 HISTSIZE=1000
-SAVEHIST=1000
+SAVEHIST=${HISTSIZE}
+
 setopt hist_ignore_all_dups
-setopt appendhistory notify
+setopt share_history
+setopt append_history
