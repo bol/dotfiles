@@ -1,5 +1,5 @@
 bindkey -e
 
-setop notify
+setopt notify
 
 WORDCHARS="${WORDCHARS:s:/:}"
