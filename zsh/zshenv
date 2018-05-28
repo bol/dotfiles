@@ -1,3 +1,5 @@
 export EDITOR=/usr/bin/vim
-export QT_QPA_PLATFORM=wayland-eg
+# QT 5 apps run with XWayland by default. Force Wayland backend
+export QT_QPA_PLATFORM=wayland-egl
+
 [[ -d $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
