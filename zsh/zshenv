@@ -1,6 +1,4 @@
 export EDITOR=/usr/bin/vim
-# QT 5 apps run with XWayland by default. Force Wayland backend
-export QT_QPA_PLATFORM=wayland-egl
 
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
 export _JAVA_AWT_WM_NONREPARENTING=1
