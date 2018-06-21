@@ -15,8 +15,13 @@ Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-eunuch'
 Plug 'vim-syntastic/syntastic'
-Plug 'Valloric/YouCompleteMe',
-            \ { 'do' : 'python2 install.py --system-libclang --system-boost --clang-completer --rust-completer --java-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do' :
+            \ 'python2 install.py' .
+            \ ' --system-libclang' .
+            \ '--system-boost ' .
+            \ '--clang-completer ' .
+            \ '--rust-completer ' .
+            \ '--java-completer' }
 Plug 'sjl/gundo.vim'
 Plug 'godlygeek/tabular'
 Plug 'Raimondi/delimitMate'
