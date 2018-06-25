@@ -63,7 +63,7 @@ local globalkeys = table.join(
 
         key({}, "Print",
                 function()
-                    spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'")
+                    spawn(programs.screenshot)
                     naughty.notify({ text = "Taking screenshot", timeout = 2 })
                 end,
                 { description = "take screenshot", group = "awesome" }
@@ -132,11 +132,11 @@ local globalkeys = table.join(
 -- Sound
         key({ modkey, }, "KP_Add",
                 function()
-                    spawn("pulseaudio-ctl up")
+                    spawn(programs.audio_volume_up)
                 end),
         key({ modkey, }, "KP_Subtract",
                 function()
-                    spawn("pulseaudio-ctl down")
+                    spawn(programs.audio_volume_down)
                 end),
 
         key({ modkey, }, "l",
