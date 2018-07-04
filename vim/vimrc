@@ -249,3 +249,8 @@ nnoremap <space>gpl :Dispatch! git pull<CR>
 
 " fugitive
 let g:fugitive_bitbucket_domains = ['scm.prod.nordnet.se']
+
+augroup vimrc     " Source vim configuration upon save
+    autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+    autocmd! BufWritePost $MYGVIMRC if has('gui_running') | source % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+augroup END
