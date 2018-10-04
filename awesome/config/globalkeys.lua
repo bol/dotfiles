@@ -2,7 +2,7 @@ local table = require("gears.table")
 local key = require("awful.key")
 
 local tag = require("awful.tag")
-local client = require("awful.client")
+local aclient = require("awful.client")
 local screen = require("awful.screen")
 local layout = require("awful.layout")
 local prompt = require("awful.prompt")
@@ -44,13 +44,13 @@ local globalkeys = table.join(
         ),
         key({ modkey, }, "j",
                 function()
-                    client.focus.byidx(1)
+                    aclient.focus.byidx(1)
                 end,
                 { description = "focus next by index", group = "client" }
         ),
         key({ modkey, }, "k",
                 function()
-                    client.focus.byidx(-1)
+                    aclient.focus.byidx(-1)
                 end,
                 { description = "focus previous by index", group = "client" }
         ),
@@ -79,13 +79,13 @@ local globalkeys = table.join(
 -- Layout manipulation
         key({ modkey, "Shift" }, "j",
                 function()
-                    client.swap.byidx(1)
+                    aclient.swap.byidx(1)
                 end,
                 { description = "swap with next client by index", group = "client" }
         ),
         key({ modkey, "Shift" }, "k",
                 function()
-                    client.swap.byidx(-1)
+                    aclient.swap.byidx(-1)
                 end,
                 { description = "swap with previous client by index", group = "client" }
         ),
@@ -102,12 +102,12 @@ local globalkeys = table.join(
                 { description = "focus the previous screen", group = "screen" }
         ),
         key({ modkey, }, "u",
-                client.urgent.jumpto,
+                aclient.urgent.jumpto,
                 { description = "jump to urgent client", group = "client" }
         ),
         key({ modkey, }, "Tab",
                 function()
-                    client.focus.history.previous()
+                    aclient.focus.history.previous()
                     if client.focus then
                         client.focus:raise()
                     end
@@ -189,7 +189,7 @@ local globalkeys = table.join(
         ),
         key({ modkey, "Control" }, "n",
                 function()
-                    local c = client.restore()
+                    local c = aclient.restore()
                     -- Focus restored client
                     if c then
                         client.focus = c
