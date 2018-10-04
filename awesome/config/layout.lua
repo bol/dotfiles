@@ -44,7 +44,7 @@ end
 -- {{{ Wibox
 local separators = lain.util.separators
 local clock = wibox.widget.textclock()
-lain.widget.calendar({
+lain.widget.cal({
     attach_to = { clock },
 })
 
