@@ -20,7 +20,30 @@ function link_conf() {
 	fi
 }
 
+function install_module() {
+    module=$1
+    install_script="${DOTFILEDIR}/${module}/install"
 
-for script in "${DOTFILEDIR}"/*/install; do
-	[ -x "${script}" ] && source "${script}" $(dirname "${script}")
-done
+    if [ -x "${install_script}" ]; then
+        source "${install_script}" $(dirname "${install_script}")
+    else
+        echo "No such module: ${module}"
+        exit 1
+    fi
+}
+
+function all_modules() {
+    for dir in ${DOTFILEDIR}/*/install; do
+        basename $(dirname $dir)
+    done
+}
+
+if [ ! -z "$1" ]; then
+    for module in $@; do
+        install_module "${module}"
+    done
+else
+    for module in $(all_modules); do
+        install_module $module
+    done
+fi
