@@ -1,3 +1,10 @@
+[[ -e $HOME/.zplugin ]] || {
+    read -q '?$HOME/.zplugin does not exist, do you want to install it? ' || return -1
+        print '\ninstalling zplugin'
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
+    }
+source "${HOME}/.zplugin/bin/zplugin.zsh"
+
 for script in "${HOME}"/.zsh.d/*; do
     source $script
 done

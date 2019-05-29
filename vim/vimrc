@@ -3,6 +3,10 @@
 "
 " Install Plugins
 " -----------------------------------------------------------------------------
+set nocompatible
+syntax on
+filetype plugin indent on
+
 call plug#begin()
 " Theme and look
 Plug 'altercation/vim-colors-solarized'
@@ -16,13 +20,9 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-eunuch'
 Plug 'vim-syntastic/syntastic'
 Plug 'Valloric/YouCompleteMe', { 'do' :
-            \ 'python2 install.py' .
-            \ ' --system-libclang' .
-            \ '--system-boost ' .
-            \ '--clang-completer ' .
-            \ '--rust-completer ' .
-            \ '--java-completer' }
-Plug 'sjl/gundo.vim'
+            \ './install.py' .
+            \ ' --java-completer' }
+Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-dispatch'
@@ -32,6 +32,8 @@ Plug 'will133/vim-dirdiff'
 Plug 'tpope/vim-fugitive'
 
 " Languages and formats
+Plug 'hashivim/vim-terraform'
+Plug 'juliosueiras/vim-terraform-completion'
 Plug 'cespare/vim-toml'
 Plug 'elzr/vim-json'
 Plug 'vim-ruby/vim-ruby'
@@ -75,18 +77,6 @@ set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
 let g:solarized_termcolors=256
 set background=dark
 colorscheme solarized
-
-" gVim
-if has('gui_running')
-    set guioptions-=m               " remove menu
-    set guioptions-=T               " remove toolbar
-    set guioptions-=r               " remove right scrollbar
-    set guioptions-=b               " remove bottom scrollbar
-    set guioptions-=L               " remove left scrollbar
-    set guicursor+=a:block-blinkon0 " always use block cursor, no cursor blinking
-    set guifont=Source\ Code\ Pro\ for\ Powerline
-    set lines=50 columns=100        " Initial size
-endif
 
 " vimdiff
 if &diff
@@ -171,7 +161,7 @@ let g:ycm_python_binary_path = 'python'
 
 " Gundo
 " -----------------------------------------------------------------------------
-map <C-u> :GundoToggle<CR>
+map <C-u> :UndotreeToggle<CR>
 
 " Tagbar
 " -----------------------------------------------------------------------------

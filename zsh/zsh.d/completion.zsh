@@ -1,3 +1,5 @@
+zplugin light zsh-users/zsh-completions
+plugins=(… zsh-completions)
 fpath=(${0:a:h}/functions $fpath)
 autoload -Uz compinit && compinit
 
