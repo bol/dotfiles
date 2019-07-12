@@ -39,11 +39,11 @@ function all_modules() {
 }
 
 if [ ! -z "$1" ]; then
-    for module in $@; do
-        install_module "${module}"
-    done
+    modules="${@}"
 else
-    for module in $(all_modules); do
-        install_module $module
-    done
+    modules="$(all_modules)"
 fi
+
+for module in ${modules}; do
+    install_module "${module}"
+done

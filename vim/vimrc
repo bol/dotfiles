@@ -73,10 +73,11 @@ set ignorecase           " case insensitive searching
 set smartcase            " override ignorecase if upper case typed
 
 " Colors / Theme
+set bg=dark
 set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
 let g:solarized_termcolors=256
-set background=dark
 colorscheme solarized
+highlight Comment cterm=italic
 
 " vimdiff
 if &diff

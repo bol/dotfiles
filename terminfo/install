@@ -1,0 +1,3 @@
+tic xterm-256color.terminfo
+tic tmux-256color.terminfo
+tic -x alacritty.terminfo

@@ -1,16 +1,13 @@
 setopt prompt_subst
 
-# Set normal, left hand prompt
-PROMPT='%(?.%K{22}%F{249}.%K{88}%F{249})%3~ %(?.%F{22}.%F{88})%k%f '
-
 # Fancy git info on the right hand side
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr '%F{4}●'
 zstyle ':vcs_info:*' unstagedstr '%F{3}✚'
-zstyle ':vcs_info:*' formats       '%F{92}%F{64}%b%m%c%u% %f'
-zstyle ':vcs_info:*' actionformats '%F{64}%b%m%c%u%F{15}|%F{1}%a%f'
+zstyle ':vcs_info:*' formats       '%F{92}%F{64}%b%m%c%u'
+zstyle ':vcs_info:*' actionformats '%F{64}%b%m%c%u%F{15}|%F{1}%a'
 zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
 function +vi-git-status(){
@@ -30,10 +27,12 @@ function +vi-git-status(){
         fi
     done <<(git status --porcelain 2> /dev/null)
 
-    [[ -n $untracked ]] && hook_com[unstaged]+='%F{241}…'
+    [[ -n $untracked ]] && hook_com[unstaged]+='%F{241}…%f'
     hook_com[misc]+=${(j:/:)gitstatus}
 }
 
 precmd () { vcs_info }
 
-RPS1='${vcs_info_msg_0_} $EPS1'
+# Set normal, left hand prompt
+PROMPT='%(?.%K{22}%F{249}.%K{88}%F{249})%3~ %(?.%F{22}.%F{88})%k%f '
+RPROMPT='${vcs_info_msg_0_}'
