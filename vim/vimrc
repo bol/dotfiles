@@ -105,9 +105,6 @@ let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exec = './node_modules/.bin/eslint'
 
-let g:syntastic_ruby_rubylint_exec = '/home/bol/bin/ruby-lint'
-let g:syntastic_ruby_rubocop_exec = '/home/bol/bin/rubocop'
-let g:syntastic_ruby_checkers = ['mri', 'rubocop', 'rubylint']
 let g:syntastic_quiet_messages = { "type": "style" }
 
 let g:enable_style_warnings= 0
