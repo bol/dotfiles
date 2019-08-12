@@ -20,6 +20,24 @@ function link_conf() {
 	fi
 }
 
+function copy_conf() {
+	source=$1
+	target=$2
+	sudo=$3
+
+	[ -d $(dirname $target) ] || mkdir -p $(dirname $target)
+	[ -e $target ] && return
+
+	if [ -z $sudo ]; then
+		echo "Installing ${target}"
+		cp $source $target
+	else
+		sudo -k
+		echo "Installing (sudo) ${target}"
+		sudo cp $source $target
+	fi
+}
+
 function install_module() {
     module=$1
     install_script="${DOTFILEDIR}/${module}/install"

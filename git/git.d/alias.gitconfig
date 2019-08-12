@@ -1,0 +1,2 @@
+[alias]
+    lg = log --graph --topo-order --decorate --oneline --boundary --date=iso --pretty=format:'%>|(20) %C(yellow)%h%C(reset) %C(green)%cd%C(reset) %<(20)%C(blue)%an%C(reset) %s%C(blue)%d%C(reset)'

@@ -1,0 +1,8 @@
+[user]
+	name = Niklas Bolander
+	email = niklas.bolander@nordnet.se
+
+[include]
+    path = ~/.git.d/alias.gitconfig
+    path = ~/.git.d/core.gitconfig
+    path = ~/.git.d/push.gitconfig
