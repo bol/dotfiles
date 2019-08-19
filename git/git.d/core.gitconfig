@@ -1,4 +1,4 @@
 [core]
     pager = diff-so-fancy | less -FXRi
-	autocrlf = input
+    autocrlf = input
     editor = vim
