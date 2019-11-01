@@ -1,2 +1,5 @@
 [alias]
     lg = log --graph --topo-order --decorate --oneline --boundary --date=iso --pretty=format:'%>|(20) %C(yellow)%h%C(reset) %C(green)%cd%C(reset) %<(20)%C(blue)%an%C(reset) %s%C(blue)%d%C(reset)'
+    cm = checkout master
+    rh = reset --hard HEAD
+    cleanup-branches = ! git for-each-ref --format '%(refname:short)' refs/heads|grep -v '^master$'|xargs git branch -D

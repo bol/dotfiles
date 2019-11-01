@@ -337,7 +337,7 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
   # When set to `true`, selected text will be copied to the primary clipboard.
-  save_to_clipboard: false
+  save_to_clipboard: true
 
 # Allow terminal applications to change Alacritty's window title.
 dynamic_title: true
@@ -528,6 +528,7 @@ key_bindings:
   - { key: K,      mods: Command,         action: ClearHistory     }
   - { key: K,      mods: Command,         chars: "\x0c"            }
   - { key: V,      mods: Command,         action: Paste            }
+  - { key: Insert, mods: Shift,           action: Paste            }
   - { key: C,      mods: Command,         action: Copy             }
   - { key: H,      mods: Command,         action: Hide             }
   - { key: Q,      mods: Command,         action: Quit             }
