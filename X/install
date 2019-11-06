@@ -1,2 +1,0 @@
-link_conf $1/Xresources $HOME/.Xresources
-link_conf $1/xinitrc $HOME/.xinitrc
