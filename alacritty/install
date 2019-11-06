@@ -1,1 +1,8 @@
-link_conf $1/config $HOME/.config/alacritty
+case $(uname -s) in
+    Linux)
+        link_conf $1/config-linux $HOME/.config/alacritty ;;
+    Darwin)
+        link_conf $1/config-osx $HOME/.config/alacritty ;;
+    *)
+        echo 'No Alacritty configuration available for your platform' ;;
+esac
