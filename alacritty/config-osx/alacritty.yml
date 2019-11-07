@@ -531,6 +531,7 @@ key_bindings:
   - { key: Insert, mods: Shift,           action: Paste            }
   - { key: C,      mods: Command,         action: Copy             }
   - { key: H,      mods: Command,         action: Hide             }
+  - { key: Return, mods: Command,         action: ToggleFullscreen }
   - { key: Q,      mods: Command,         action: Quit             }
   - { key: Period, mods: Alt,             chars: "\x1b."           } # Alt + .
   - { key: Space,  mods: Alt,             chars: " "               }
