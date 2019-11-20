@@ -1,2 +1,2 @@
-zplugin ice wait"0" atinit"zpcompinit; zpcdreplay"
+zplugin ice wait lucid atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
