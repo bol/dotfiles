@@ -1,6 +1,10 @@
 case $(uname -s) in
     Linux)
-        link_conf $1/config-linux $HOME/.config/alacritty ;;
+        if [ $(uname -r|grep -i microsoft) ]; then
+            link_conf $1/config-wsl $HOME/.config/alacritty
+        else
+            link_conf $1/config-linux $HOME/.config/alacritty
+        fi ;;
     Darwin)
         link_conf $1/config-osx $HOME/.config/alacritty ;;
     *)
