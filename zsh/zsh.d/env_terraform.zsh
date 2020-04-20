@@ -6,3 +6,5 @@ function activate_tfenv() {
         }
     export PATH="$HOME/.tfenv/bin:$PATH"
 }
+
+activate_tfenv
