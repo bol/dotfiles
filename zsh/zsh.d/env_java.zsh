@@ -6,5 +6,3 @@ function activate_sdkman() {
         }
     source "$HOME/.sdkman/bin/sdkman-init.sh"
 }
-
-activate_sdkman

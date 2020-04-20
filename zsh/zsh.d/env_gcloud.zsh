@@ -6,5 +6,3 @@ function activate_gcloud() {
     . "$HOME/google-cloud-sdk/path.zsh.inc"
     . "$HOME/google-cloud-sdk/completion.zsh.inc"
 }
-
-activate_gcloud

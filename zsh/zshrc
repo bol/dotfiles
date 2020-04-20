@@ -8,3 +8,7 @@ source "${HOME}/.zplugin/bin/zplugin.zsh"
 for script in "${HOME}"/.zsh.d/*; do
     source $script
 done
+
+activate_gcloud
+activate_sdkman
+activate_tfenv
