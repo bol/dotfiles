@@ -1,0 +1,34 @@
+case "$(uname -s)" in
+    Darwin)
+        FONT_DIR="${HOME}/Library/Fonts"
+        ;;
+    *)
+        FONT_DIR="${HOME}/.local/share/fonts"
+        ;;
+esac
+
+function urldecode() {
+    local url_encoded="${1//+/ }"
+    printf '%b' "${url_encoded//%/\\x}"
+}
+
+function ensure_font() {
+    FONT_PATH="$1"
+    URLDECODED_FILENAME="$(urldecode "$(basename ${FONT_PATH})")"
+
+    [ ! -f "${FONT_DIR}/${URLDECODED_FILENAME}" ] && (
+        echo "Downloading font ${URLDECODED_FILENAME}"
+        curl -sS -fLo "${FONT_DIR}/${URLDECODED_FILENAME}" "https://github.com/ryanoasis/nerd-fonts/raw/v2.1.0/patched-fonts/${FONT_PATH}"
+    )
+}
+
+[ ! -d "${FONT_DIR}" ] && mkdir "${FONT_DIR}"
+
+ensure_font "Meslo/M/Regular/complete/Meslo%20LG%20M%20Regular%20Nerd%20Font%20Complete.ttf"
+ensure_font "Meslo/M/Italic/complete/Meslo%20LG%20M%20Italic%20Nerd%20Font%20Complete.ttf"
+ensure_font "Meslo/M/Bold/complete/Meslo%20LG%20M%20Bold%20Nerd%20Font%20Complete.ttf"
+ensure_font "Meslo/M/Bold-Italic/complete/Meslo%20LG%20M%20Bold%20Italic%20Nerd%20Font%20Complete.ttf"
+
+ensure_font "SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf"
+ensure_font "SourceCodePro/Bold/complete/Sauce%20Code%20Pro%20Bold%20Nerd%20Font%20Complete.ttf"
+ensure_font "SourceCodePro/Italic/complete/Sauce%20Code%20Pro%20Italic%20Nerd%20Font%20Complete.ttf"

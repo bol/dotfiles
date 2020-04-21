@@ -12,7 +12,6 @@ call plug#begin()
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'powerline/fonts', { 'do' : './install.sh' }
 Plug 'majutsushi/tagbar'
 
 " General
@@ -125,6 +124,7 @@ nnoremap <A-Down> :lnext<CR>
 nnoremap <A-s> :call ToggleStyleWarnings()<CR>
 
 " Airline
+" -----------------------------------------------------------------------------
 let g:airline_powerline_fonts=1
 let g:airline_theme="solarized"
 " Enable the list of buffers
@@ -132,6 +132,15 @@ let g:airline#extensions#tabline#enabled = 1
 
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
+
+" testing rounded separators (extra-powerline-symbols):
+let g:airline_left_sep = "\uE0B4"
+let g:airline_right_sep = "\uE0B6"
+
+" set the CN (column number) symbol:
+let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
+
+
 nnoremap <A-Right> :bnext<CR>
 nnoremap <A-Left> :bprev<CR>
 nnoremap <A-d> :bdelete<CR>
