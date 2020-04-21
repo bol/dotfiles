@@ -1,13 +1,14 @@
 setopt prompt_subst
+autoload -Uz add-zsh-hook
 
-# Fancy git info on the right hand side
+# Fancy git info
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' stagedstr '%F{4}●'
-zstyle ':vcs_info:*' unstagedstr '%F{3}✚'
-zstyle ':vcs_info:*' formats       '%F{92}%F{64}%b%m%c%u'
-zstyle ':vcs_info:*' actionformats '%F{64}%b%m%c%u%F{15}|%F{1}%a'
+zstyle ':vcs_info:*' stagedstr '%F{018}●'
+zstyle ':vcs_info:*' unstagedstr '%F{136}✚'
+zstyle ':vcs_info:*' formats       '%K{239}%F{244}%K{244}%F{92}%F{022}%b%m%c%u%K{239}%F{244}'
+zstyle ':vcs_info:*' actionformats '%K{239}%F{244}%K{244}%F{022}%b%m%c%u%F{244}|%F{088}%a%K{239}%F{244}'
 zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
 function +vi-git-status(){
@@ -15,10 +16,10 @@ function +vi-git-status(){
     local -a gitstatus
 
     ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
-    (( $ahead )) && gitstatus+=( "%F{12}↑${ahead}" )
+    (( $ahead )) && gitstatus+=( "%F{019}↑${ahead}" )
 
     behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
-    (( $behind )) && gitstatus+=( "%F{9}↓${behind}" )
+    (( $behind )) && gitstatus+=( "%F{124}↓${behind}" )
 
 
     while IFS=$'\n' read line; do
@@ -31,8 +32,16 @@ function +vi-git-status(){
     hook_com[misc]+=${(j:/:)gitstatus}
 }
 
-precmd () { vcs_info }
+add-zsh-hook -Uz precmd vcs_info
 
-# Set normal, left hand prompt
-PROMPT='%(?.%K{22}%F{249}.%K{88}%F{249})%3~ %(?.%F{22}.%F{88})%k%f '
-RPROMPT='${vcs_info_msg_0_}'
+function k8s_info() {
+  k8s_prompt="%K{239}%F{244}%K{244}%F{021}☸%F{239}$(kubectl config current-context)%K{239}%F{244}"
+}
+
+add-zsh-hook -Uz precmd k8s_info
+
+# Define some colors
+# Refer to xterm_256color chart: https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg
+
+NEWLINE=$'\n'
+PROMPT='${k8s_prompt} %2~$ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
