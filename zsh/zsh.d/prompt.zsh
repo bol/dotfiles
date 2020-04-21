@@ -1,6 +1,13 @@
 setopt prompt_subst
 autoload -Uz add-zsh-hook
 
+# Colors are 256-bit color
+# Refer to chart here: https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg
+
+# The private use Unicode symbols are picked from Powerline extra symbols,
+# Prompt is intended to be used with a font that supports them.
+# https://github.com/ryanoasis/powerline-extra-symbols
+
 # Fancy git info
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
@@ -39,9 +46,6 @@ function k8s_info() {
 }
 
 add-zsh-hook -Uz precmd k8s_info
-
-# Define some colors
-# Refer to xterm_256color chart: https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg
 
 NEWLINE=$'\n'
 PROMPT='${k8s_prompt} %2~$ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
