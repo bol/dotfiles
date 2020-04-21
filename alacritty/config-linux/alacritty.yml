@@ -102,38 +102,15 @@ tabspaces: 8
 font:
   # Normal (roman) font face
   normal:
-  # Font family
-  #
-  # Default:
-  #   - (macOS) Menlo
-  #   - (Linux) monospace
-  #   - (Windows) Consolas
-  #family: monospace
-    family: "Meslo LG M for Powerline"
-
-  # The `style` can be specified to pick a specific face.
+    family: SauceCodePro Nerd Font
     style: Regular
 
-  # Bold font face
   bold:
-  # Font family
-  #
-  # If the bold family is not specified, it will fall back to the
-  # value specified for the normal font.
-    family: Meslo LG M for Powerline
-
-  # The `style` can be specified to pick a specific face.
+    family: SauceCodePro Nerd Font
     style: Bold
 
-  # Italic font face
   italic:
-  # Font family
-  #
-  # If the italic family is not specified, it will fall back to the
-  # value specified for the normal font.
-    family: Meslo LG M for Powerline
-
-  # The `style` can be specified to pick a specific face.
+    family: SauceCodePro Nerd Font
     style: Italic
 
   # Point size

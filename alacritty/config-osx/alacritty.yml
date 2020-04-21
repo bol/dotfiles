@@ -90,19 +90,19 @@ scrolling:
 # Font configuration (changes require restart)
 font:
   normal:
-    family: "Meslo LG M for Powerline"
+    family: SauceCodePro Nerd Font
     style: Regular
 
   bold:
-    family: Meslo LG M for Powerline
+    family: SauceCodePro Nerd Font
     style: Bold
 
   italic:
-    family: Meslo LG M for Powerline
+    family: SauceCodePro Nerd Font
     style: Italic
 
   # Point size
-  size: 12.0
+  size: 16.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
