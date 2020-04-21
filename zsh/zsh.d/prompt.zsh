@@ -48,4 +48,4 @@ function k8s_info() {
 add-zsh-hook -Uz precmd k8s_info
 
 NEWLINE=$'\n'
-PROMPT='${k8s_prompt} %2~$ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
+PROMPT='${k8s_prompt} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
