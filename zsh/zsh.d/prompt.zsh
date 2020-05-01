@@ -42,7 +42,8 @@ function +vi-git-status(){
 add-zsh-hook -Uz precmd vcs_info
 
 function k8s_info() {
-  k8s_prompt="%K{239}%F{244}%K{244}%F{021}☸%F{239}$(kubectl config current-context)%K{239}%F{244}"
+  current_context=$(kubectl config current-context 2>/dev/null || echo '<none>')
+  k8s_prompt="%K{239}%F{244}%K{244}%F{021}☸%F{239}${current_context}%K{239}%F{244}"
 }
 
 add-zsh-hook -Uz precmd k8s_info
