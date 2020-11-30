@@ -1,4 +1,5 @@
 setopt prompt_subst
+zmodload zsh/mapfile
 autoload -Uz add-zsh-hook
 
 # Colors are 256-bit color
@@ -48,5 +49,12 @@ function k8s_info() {
 
 add-zsh-hook -Uz precmd k8s_info
 
+function tf_info() {
+  current_workspace=${mapfile[.terraform/environment]:-<none>}
+  tf_prompt="%K{239}%F{244}%K{244}%F{021}TF:%F{239}${current_workspace}%K{239}%F{244}"
+}
+
+add-zsh-hook -Uz precmd tf_info
+
 NEWLINE=$'\n'
-PROMPT='${k8s_prompt} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
+PROMPT='${k8s_prompt} ${tf_prompt} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
