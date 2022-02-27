@@ -1,0 +1,5 @@
+link_conf $1/nvim_config ~/.config/nvim
+
+[[ ! -e ~/.local/share/nvim/site/pack/packer/start/ ]] && mkdir -p ~/.local/share/nvim/site/pack/packer/start/
+[[ ! -e ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]] && \
+    git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
