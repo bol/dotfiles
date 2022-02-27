@@ -1,6 +1,6 @@
 [user]
 	name = Niklas Bolander
-	email = niklas.bolander@nordnet.se
+	email = niklas@bolander.dev
 
 [include]
     path = ~/.git.d/alias.gitconfig
