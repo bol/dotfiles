@@ -1,4 +1,5 @@
 [core]
-    pager = diff-so-fancy | less -FXRi
-    autocrlf = input
+    pager = delta
+    autocrlf = false
     editor = vim
+    attributesfile = ~/.git.d/attributes
