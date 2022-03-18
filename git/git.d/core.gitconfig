@@ -1,5 +1,5 @@
 [core]
     pager = delta
     autocrlf = false
-    editor = vim
+    editor = nvim
     attributesfile = ~/.git.d/attributes
