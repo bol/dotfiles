@@ -1,1 +1,1 @@
-zplugin load agkozak/zsh-z
+zinit load agkozak/zsh-z

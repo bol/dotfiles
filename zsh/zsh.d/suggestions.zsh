@@ -1,5 +1,5 @@
-zplugin ice wait lucid atload"_zsh_autosuggest_start"
-zplugin light zsh-users/zsh-autosuggestions
+zinit ice wait lucid atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4f4f,bg=#073642"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
