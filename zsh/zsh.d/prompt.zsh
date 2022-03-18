@@ -34,7 +34,7 @@ function +vi-git-status(){
         if [[ "$line" =~ '^\?\? ' ]]; then
             [[ -n $untracked ]] && continue || untracked='yes'
         fi
-    done <<(git status --porcelain 2> /dev/null)
+    done < <(git status --porcelain 2> /dev/null)
 
     [[ -n $untracked ]] && hook_com[unstaged]+='%F{241}…%f'
     hook_com[misc]+=${(j:/:)gitstatus}
@@ -43,7 +43,19 @@ function +vi-git-status(){
 add-zsh-hook -Uz precmd vcs_info
 
 function k8s_info() {
-  current_context=$(kubectl config current-context 2>/dev/null || echo '<none>')
+  local current_cluster current_namespace current_context
+
+  current_cluster=$(kubectl config view --minify --output 'jsonpath={.current-context}' 2>/dev/null || echo '')
+  current_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null || echo '')
+
+  if [[ -z "$current_cluster" ]]; then
+    current_context='<none>'
+  elif [[ -z "$current_namespace" || "$current_namespace" = 'default' ]]; then
+    current_context="$current_cluster"
+  else
+    current_context="$current_cluster:$current_namespace"
+  fi
+
   k8s_prompt="%K{239}%F{244}%K{244}%F{021}☸%F{239}${current_context}%K{239}%F{244}"
 }
 
