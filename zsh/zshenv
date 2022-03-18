@@ -1,3 +1,3 @@
-export EDITOR=vim
+export EDITOR=nvim
 
 [[ -d $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
