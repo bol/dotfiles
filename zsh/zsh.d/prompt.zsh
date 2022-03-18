@@ -68,5 +68,19 @@ function tf_info() {
 
 add-zsh-hook -Uz precmd tf_info
 
+function aws_info() {
+  local aws_profile expiration is_active
+  expiration=$(strftime -r '%FT%T' ${AWSUME_EXPIRATION:-1970-01-01T00:00:00})
+  if [[ $EPOCHSECONDS -ge $expiration ]]; then
+    aws_profile="%F{239}${AWSUME_PROFILE:-<none>}"
+  else
+    aws_profile="%F{022}${AWSUME_PROFILE:-<none>}"
+  fi
+
+  aws_prompt="%K{239}%F{244}%K{244}%F{214}%F{239}:${aws_profile}%K{239}%F{244}"
+}
+
+add-zsh-hook -Uz precmd aws_info
+
 NEWLINE=$'\n'
-PROMPT='${k8s_prompt} ${tf_prompt} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
+PROMPT='${aws_prompt} ${k8s_prompt} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
