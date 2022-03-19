@@ -7,6 +7,3 @@ zinit light "greymd/docker-zsh-completion"
 
 zinit ice lucid wait blockf
 zinit snippet "https://raw.githubusercontent.com/bazelbuild/bazel/master/scripts/zsh_completion/_bazel"
-
-zplugin ice lucid wait blockf
-zplugin snippet "https://raw.githubusercontent.com/bazelbuild/bazel/master/scripts/zsh_completion/_bazel"
