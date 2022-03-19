@@ -11,4 +11,5 @@ setopt hist_verify            # show command with history expansion to user befo
 setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
-zinit load zdharma-continuum/history-search-multi-word
+zinit ice wait lucid blockf
+zinit light zdharma-continuum/history-search-multi-word
