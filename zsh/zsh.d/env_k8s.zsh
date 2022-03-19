@@ -1,4 +1,7 @@
 function activate_k8s() {
+
+  autoload -Uz compinit && compinit
+
   source <(kubectl completion zsh)
   alias k=kubectl
   compdef __start_kubectl k
