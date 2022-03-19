@@ -3,8 +3,12 @@ function activate_aws() {
     read -q '?aws cli is not on the path, do you want to install it? ' || return 1
     updateawscli
   fi
-  alias awsume=". awsume"
+
+  autoload -Uz bashcompinit && bashcompinit
+
   complete -C aws_completer aws
+
+  alias awsume=". awsume"
 }
 
 function updateawscli() {
