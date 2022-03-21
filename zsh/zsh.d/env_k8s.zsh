@@ -5,6 +5,8 @@ function activate_k8s() {
   source <(kubectl completion zsh)
   alias k=kubectl
   compdef __start_kubectl k
+  alias kgy="kubectl get -o yaml"
+  compdef "__start_kubectl get" kgy
 
   [[ -d $HOME/.krew ]] && export PATH="$HOME/.krew/bin:$PATH"
   if ! type kubectl-krew >/dev/null; then
