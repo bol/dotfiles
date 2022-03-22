@@ -7,3 +7,5 @@ zinit light "greymd/docker-zsh-completion"
 
 zinit ice lucid wait blockf
 zinit snippet "https://raw.githubusercontent.com/bazelbuild/bazel/master/scripts/zsh_completion/_bazel"
+
+autoload -Uz compinit && compinit

@@ -1,12 +1,15 @@
 function activate_k8s() {
+  [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
-  autoload -Uz compinit && compinit
-
-  source <(kubectl completion zsh)
-  alias k=kubectl
-  compdef __start_kubectl k
+  alias k="kubectl"
+  alias kg="kubectl get"
+  alias kgl="kubectl get --show-labels"
   alias kgy="kubectl get -o yaml"
-  compdef "__start_kubectl get" kgy
+
+  # Colorize yaml
+  alias kc="bat -l yaml --theme 'Solarized (dark)' --style=plain"
+  # Tidy yaml with color
+  alias knc="kubectl neat | kc"
 
   [[ -d $HOME/.krew ]] && export PATH="$HOME/.krew/bin:$PATH"
   if ! type kubectl-krew >/dev/null; then
