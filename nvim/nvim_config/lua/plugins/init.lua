@@ -9,6 +9,7 @@ return require('packer').startup(function(use)
   local plugins = {
     'plugins.filetype',
     'plugins.theme',
+    'plugins.treesitter',
   }
 
   for _,plugin in ipairs(plugins) do
