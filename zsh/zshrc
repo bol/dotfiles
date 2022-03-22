@@ -7,7 +7,7 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
     }
 source "${ZINIT_HOME}/zinit.zsh"
 
-for script in "${HOME}"/.zsh.d/*; do
+for script in "${HOME}"/.zsh.d/*.zsh; do
     source $script
 done
 
