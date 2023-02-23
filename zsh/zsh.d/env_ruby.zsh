@@ -7,6 +7,6 @@ function activate_rbenv() {
             git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
 	    git clone https://github.com/ianheggie/rbenv-binstubs.git $HOME/.rbenv/plugins/rbenv-binstubs
         }
-    export PATH="$HOME/.rbenv/bin:$PATH"
+    path+="$HOME/.rbenv/bin"
     eval "$(rbenv init -)"
 }

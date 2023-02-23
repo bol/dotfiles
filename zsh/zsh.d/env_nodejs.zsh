@@ -6,6 +6,6 @@ function activate_nodenv() {
             mkdir -p $HOME/.nodenv/plugins
             git clone https://github.com/nodenv/node-build.git $HOME/.nodenv/plugins/node-build
         }
-    export PATH="$HOME/.nodenv/bin:$PATH"
+    path+="$HOME/.nodenv/bin"
     eval "$(nodenv init -)"
 }

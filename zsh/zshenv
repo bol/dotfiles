@@ -1,5 +1,6 @@
+setopt no_global_rcs
+
 export EDITOR=nvim
 
-[[ -d $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
-[[ -d $HOME/.local/bin ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -d $HOME/bin ]] && path=("${HOME}/bin" $path)

@@ -10,7 +10,7 @@ function activate_k8s() {
   alias kn="kubectl neat"
 
 
-  [[ -d $HOME/.krew ]] && export PATH="$HOME/.krew/bin:$PATH"
+  [[ -d $HOME/.krew ]] && path+="$HOME/.krew/bin"
   if ! type kubectl-krew >/dev/null; then
       read -q '?krew is not on the path, do you want to install it? ' || return 1
       (
@@ -24,7 +24,3 @@ function activate_k8s() {
       )
   fi
 }
-
-export PATH="/opt/homebrew/opt/kubernetes-cli@1.22/bin:$PATH"
-export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
-export PATH="/opt/homebrew/opt/git/bin:$PATH"

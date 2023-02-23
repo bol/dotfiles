@@ -1,10 +1,10 @@
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[[ -e $ZINIT_HOME ]] || {
+if [[ ! -e "${ZINIT_HOME}" ]]; then
     read -q "?$ZINIT_HOME does not exist, do you want to install it? " || return -1
-        print '\ninstalling zinit'
-        mkdir -p "$(dirname $ZINIT_HOME)"
-        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-    }
+    print '\ninstalling zinit'
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 for script in "${HOME}"/.zsh.d/*.zsh; do

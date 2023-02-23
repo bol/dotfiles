@@ -1,4 +1,9 @@
 function activate_aws() {
+  aws_path='/usr/local/bin'
+  if (( ! $path[(Ie)$aws_path])); then
+    path+="$aws_path"
+  fi
+
   if ! type aws >/dev/null; then
     read -q '?aws cli is not on the path, do you want to install it? ' || return 1
     updateawscli

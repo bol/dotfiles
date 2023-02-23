@@ -4,5 +4,5 @@ function activate_tfenv() {
             print '\ninstalling tfenv'
             git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv
         }
-    export PATH="$HOME/.tfenv/bin:$PATH"
+    path+="$HOME/.tfenv/bin"
 }

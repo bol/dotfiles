@@ -6,7 +6,7 @@ function activate_pyenv() {
             git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
         }
     export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
+    path+="$PYENV_ROOT/bin"
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
     eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
