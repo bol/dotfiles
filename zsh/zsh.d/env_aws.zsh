@@ -7,8 +7,6 @@ function activate_aws() {
   autoload -Uz bashcompinit && bashcompinit
 
   complete -C aws_completer aws
-
-  alias awsume=". awsume"
 }
 
 function updateawscli() {
