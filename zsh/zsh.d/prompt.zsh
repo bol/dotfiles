@@ -48,6 +48,11 @@ function k8s_info() {
   current_cluster=$(kubectl config view --minify --output 'jsonpath={.current-context}' 2>/dev/null || echo '')
   current_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null || echo '')
 
+  # Shorten full EKS cluster ARNs to only the name
+  if [ ${current_cluster[1,11]} = 'arn:aws:eks' ]; then
+    current_cluster="${current_cluster##*:cluster/}"
+  fi
+
   if [[ -z "$current_cluster" ]]; then
     current_context='<none>'
   elif [[ -z "$current_namespace" || "$current_namespace" = 'default' ]]; then
