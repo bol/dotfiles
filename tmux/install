@@ -1,3 +1,2 @@
 link_conf $1/tmux.conf $HOME/.tmux.conf
-
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git_clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm

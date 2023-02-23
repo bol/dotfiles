@@ -1,67 +1,85 @@
-#!/bin/bash
+#!/opt/homebrew/bin/zsh
+
+set -euo pipefail
 
 DOTFILEDIR=$(cd $(dirname $0);pwd)
 
 function link_conf() {
-	source=$1
-	target=$2
-	sudo=$3
+	source="$1"
+	target="$2"
 
-	[ -d $(dirname $target) ] || mkdir -p $(dirname $target)
-	[ -e $target ] && return
+	if [ -e "$target" ];then
+	  echo -e "\t\e[3mSkipping ${target}\e[0m"
+	  return
+  fi
+	[ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
-	if [ -z $sudo ]; then
-		echo "Installing ${target}"
-		ln -s $source $target
-	else
-		sudo -k
-		echo "Installing (sudo) ${target}"
-		sudo ln -s $source $target
-	fi
+  echo -e "\tLinking ${target}"
+  ln -s $source "$target"
 }
 
 function copy_conf() {
-	source=$1
-	target=$2
-	sudo=$3
+	source="$1"
+	target="$2"
 
-	[ -d $(dirname $target) ] || mkdir -p $(dirname $target)
-	[ -e $target ] && return
+	if [ -e "$target" ];then
+	  echo -e "\t\e[3mSkipping ${target}\e[0m"
+	  return
+  fi
+  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
-	if [ -z $sudo ]; then
-		echo "Installing ${target}"
-		cp $source $target
-	else
-		sudo -k
-		echo "Installing (sudo) ${target}"
-		sudo cp $source $target
-	fi
+  echo -e "\tCopying ${target}"
+  cp "$source" "$target"
 }
 
-function install_module() {
-    module=$1
-    install_script="${DOTFILEDIR}/${module}/install"
+function git_clone() {
+  source="$1"
+  target="$2"
 
-    if [ -x "${install_script}" ]; then
-        source "${install_script}" $(dirname "${install_script}")
-    else
-        echo "No such module: ${module}"
-        exit 1
-    fi
+	if [ -e "$target" ];then
+	  echo -e "\t\e[3mSkipping ${target}\e[0m"
+	  return
+  fi
+  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+
+  echo -e "\tCloning ${target}"
+  git clone --depth 1 "$source" "$target"
 }
 
-function all_modules() {
-    for dir in ${DOTFILEDIR}/*/install; do
-        basename $(dirname $dir)
-    done
+function http_get() {
+  source="$1"
+  target="$2"
+
+	if [ -e "$target" ];then
+	  echo -e "\t\e[3mSkipping ${target}\e[0m"
+	  return
+  fi
+  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+
+  echo -e "\tDownloading ${target}"
+      curl -fqsSL -o "${target}" "${source}"
 }
 
-if [ ! -z "$1" ]; then
-    modules="${@}"
+local -a modules_to_install
+
+if (( $# == 0 )); then
+  for dir in ${DOTFILEDIR}/*/install; do
+    modules_to_install+=$(basename $(dirname "$dir"))
+  done
 else
-    modules="$(all_modules)"
+  modules_to_install+=$@
 fi
 
-for module in ${modules}; do
-    install_module "${module}"
+
+for module in ${modules_to_install}; do
+    echo "Installing ${module} module"
+    install_script="${DOTFILEDIR}/${module}/install"
+
+        if [ -x "${install_script}" ]; then
+            # shellcheck source=./*/install
+            source "${install_script}" $(dirname "${install_script}")
+        else
+            echo "No such module: ${module}"
+            exit 1
+        fi
 done
