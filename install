@@ -43,7 +43,7 @@ function git_clone() {
   [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
   echo -e "\tCloning ${target}"
-  git clone --depth 1 "$source" "$target"
+  git clone --quiet --depth 1 "$source" "$target"
 }
 
 function http_get() {
@@ -57,7 +57,7 @@ function http_get() {
   [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
   echo -e "\tDownloading ${target}"
-      curl -fqsSL -o "${target}" "${source}"
+  curl -fqsSL -o "${target}" "${source}"
 }
 
 local -a modules_to_install
