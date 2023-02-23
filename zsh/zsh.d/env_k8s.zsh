@@ -3,13 +3,12 @@ function activate_k8s() {
 
   alias k="kubectl"
   alias kg="kubectl get"
-  alias kgl="kubectl get --show-labels"
+  alias kgj="kubectl get -o json"
   alias kgy="kubectl get -o yaml"
+  alias kgl="kubectl get --show-labels"
 
-  # Colorize yaml
-  alias kc="bat -l yaml --theme 'Solarized (dark)' --style=plain"
-  # Tidy yaml with color
-  alias knc="kubectl neat | kc"
+  alias kn="kubectl neat"
+
 
   [[ -d $HOME/.krew ]] && export PATH="$HOME/.krew/bin:$PATH"
   if ! type kubectl-krew >/dev/null; then
@@ -25,3 +24,7 @@ function activate_k8s() {
       )
   fi
 }
+
+export PATH="/opt/homebrew/opt/kubernetes-cli@1.22/bin:$PATH"
+export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
+export PATH="/opt/homebrew/opt/git/bin:$PATH"
