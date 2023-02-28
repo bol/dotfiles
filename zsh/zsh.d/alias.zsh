@@ -14,12 +14,6 @@ alias j2y='gojq --yaml-output'
 # Colorize YAML
 alias yc="bat --language YAML --theme 'Solarized (dark)' --style=plain"
 
-# Containers
-# Using Podman for local container handling.
-# Experimental. Still has some issues with M1 macs and testcontainers.
-alias pm="podman"
-alias compose="podman-compose"
-
 case "$(uname -s)" in
     Darwin)
         alias ls="ls -G"
