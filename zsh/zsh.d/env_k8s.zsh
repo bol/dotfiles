@@ -20,11 +20,8 @@ function activate_k8s() {
   alias kgy="kubectl get -o yaml"
   alias kgl="kubectl get --show-labels"
 
-  alias kn="kubectl neat"
-
-
   [[ -d $HOME/.krew ]] && path+="$HOME/.krew/bin"
-  if ! type kubectl-krew >/dev/null; then
+  if ! (( $+commands[kubectl-krew] )); then
       read -q '?krew is not on the path, do you want to install it? ' || return 1
       (
         set -x; cd "$(mktemp -d)" &&
@@ -36,4 +33,21 @@ function activate_k8s() {
         ./"${KREW}" install krew
       )
   fi
+
+  for cmd in ctx neat ns; do
+      if ! (( $+commands[kubectl-$cmd] )); then
+        print "The ${cmd} kubectl plugin was not found on your path.\n"
+        case "$(uname -s)" in
+            Darwin)
+              read -q "?Do you want to install it with krew? " || return -1
+              print ''
+              kubectl krew install "${cmd}"
+                ;;
+            *)
+                ;;
+        esac
+      fi
+  done
+
+  alias kn="kubectl neat"
 }
