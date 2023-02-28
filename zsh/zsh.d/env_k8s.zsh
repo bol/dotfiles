@@ -37,15 +37,9 @@ function activate_k8s() {
   for cmd in ctx neat ns; do
       if ! (( $+commands[kubectl-$cmd] )); then
         print "The ${cmd} kubectl plugin was not found on your path.\n"
-        case "$(uname -s)" in
-            Darwin)
-              read -q "?Do you want to install it with krew? " || return -1
-              print ''
-              kubectl krew install "${cmd}"
-                ;;
-            *)
-                ;;
-        esac
+        read -q "?Do you want to install it with krew? " || return -1
+        print ''
+        kubectl krew install "${cmd}"
       fi
   done
 
