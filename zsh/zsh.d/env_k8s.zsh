@@ -1,4 +1,17 @@
 function activate_k8s() {
+  if ! (( $+commands[kubectl] )); then
+    print "The kubectl command was not found on your path.\n"
+    case "$(uname -s)" in
+        Darwin)
+          read -q "?Do you want to install it from homebrew? " || return -1
+          print ''
+          brew install kubernetes-cli
+            ;;
+        *)
+            ;;
+    esac
+  fi
+
   [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
   alias k="kubectl"
