@@ -2,8 +2,4 @@ setopt no_global_rcs
 
 export EDITOR=nvim
 
-[[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ -d $HOME/bin ]] && path=("${HOME}/bin" $path)
-
-# Relaunch the shell if there is a more recent version of zsh on the path than what we are running
-[[ "$(zsh --no--globalrcs --no-rcs -c 'echo $ZSH_VERSION')" != "$ZSH_VERSION" ]] && exec zsh
