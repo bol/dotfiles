@@ -1,7 +1,7 @@
 local wezterm = require("wezterm")
 
 local config = {
-    default_prog = { '/opt/homebrew/bin/zsh' },
+    default_prog = { '/usr/bin/env', 'zsh' },
 
     color_scheme = "Builtin Solarized Dark",
 
