@@ -1,7 +1,7 @@
 local wezterm = require("wezterm")
 
 local config = {
-    default_prog = { '/usr/bin/env', 'zsh' },
+    default_prog = { '/usr/bin/env', 'tmux' },
 
     color_scheme = "Builtin Solarized Dark",
 
