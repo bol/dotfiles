@@ -75,7 +75,7 @@ for module in ${modules_to_install}; do
     echo "Installing ${module} module"
     install_script="${DOTFILEDIR}/${module}/install"
 
-        if [ -x "${install_script}" ]; then
+        if [ -e "${install_script}" ]; then
             # shellcheck source=./*/install
             source "${install_script}" $(dirname "${install_script}")
         else
