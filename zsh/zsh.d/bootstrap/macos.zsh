@@ -9,6 +9,8 @@ function __setup_macos() {
   export HOMEBREW_NO_ANALYTICS=1
   export HOMEBREW_NO_ENV_HINTS=1
 
+  # Prefer OpenSSL over the Apple LibreSSL
+  [[ -e /opt/homebrew/opt/openssl/bin ]] && path=('/opt/homebrew/opt/openssl/bin' $path)
   # Prefer GNU coreutils over the Apple BSD ones
   [[ -e /opt/homebrew/opt/coreutils/libexec/gnubin ]] && path=('/opt/homebrew/opt/coreutils/libexec/gnubin' $path)
 }
