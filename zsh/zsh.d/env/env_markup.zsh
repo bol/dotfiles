@@ -1,6 +1,6 @@
 function activate_markup() {
   for cmd in gojq bat; do
-      __ensure_brew_command "${cmd}"
+      __ensure_package_is_installed "${cmd}"
   done
 
   # Query JSON

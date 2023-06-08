@@ -1,5 +1,5 @@
 function activate_k8s() {
-  __ensure_brew_command kubectl
+  __ensure_package_is_installed kubectl
 
   [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 

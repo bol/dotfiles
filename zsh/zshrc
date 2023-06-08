@@ -7,6 +7,23 @@ if [[ ! -e "${ZINIT_HOME}" ]]; then
 fi
 source "${ZINIT_HOME}/zinit.zsh"
 
+function __ensure_package_is_installed() {
+  command="$1"
+
+  case "$(uname -s)" in
+  Darwin)
+    if ! [[ -d "/opt/homebrew/opt/${command}" ]]; then
+      print "The ${command} command was not found.\n"
+      read -q "?Do you want to install it from homebrew? " || return -1
+      print ''
+      brew install "${command}"
+    fi
+    ;;
+  *) ;;
+
+  esac
+}
+
 for script in "${HOME}"/.zsh.d/{bootstrap,,tooling,env}/*.zsh; do
     source $script
 done

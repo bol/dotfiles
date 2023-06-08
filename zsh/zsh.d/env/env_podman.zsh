@@ -3,7 +3,7 @@
 
 function activate_podman() {
   for cmd in podman podman-compose; do
-      __ensure_brew_command "${cmd}"
+      __ensure_package_is_installed "${cmd}"
   done
 
   alias pm="podman"
