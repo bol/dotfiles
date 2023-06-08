@@ -3,18 +3,7 @@
 
 function activate_podman() {
   for cmd in podman podman-compose; do
-      if ! (( $+commands[$cmd] )); then
-        print "The ${cmd} was not found on your path.\n"
-        case "$(uname -s)" in
-            Darwin)
-              read -q "?Do you want to install it from homebrew? " || return -1
-              print ''
-              brew install "${cmd}"
-                ;;
-            *)
-                ;;
-        esac
-      fi
+      __ensure_brew_command "${cmd}"
   done
 
   alias pm="podman"

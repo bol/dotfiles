@@ -15,4 +15,21 @@ function __setup_macos() {
   [[ -e /opt/homebrew/opt/coreutils/libexec/gnubin ]] && path=('/opt/homebrew/opt/coreutils/libexec/gnubin' $path)
 }
 
+function __ensure_brew_command() {
+  command="$1"
+
+  if ! [[ -d "/opt/homebrew/opt/${command}" ]]; then
+    print "The ${command} command was not found on your path.\n"
+    case "$(uname -s)" in
+        Darwin)
+          read -q "?Do you want to install it from homebrew? " || return -1
+          print ''
+          brew install "${command}"
+            ;;
+        *)
+            ;;
+    esac
+  fi
+}
+
 [[ "$(uname -s)" == "Darwin" ]] && __setup_macos

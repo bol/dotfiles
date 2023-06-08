@@ -1,17 +1,6 @@
 function activate_markup() {
   for cmd in gojq bat; do
-      if ! (( $+commands[$cmd] )); then
-        print "The ${cmd} command was not found on your path.\n"
-        case "$(uname -s)" in
-            Darwin)
-              read -q "?Do you want to install it with homebrew? " || return -1
-              print ''
-              brew install "${cmd}"
-              ;;
-            *)
-              ;;
-        esac
-      fi
+      __ensure_brew_command "${cmd}"
   done
 
   # Query JSON
