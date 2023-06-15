@@ -19,11 +19,12 @@ function __ensure_package_is_installed() {
                 brew install "${command}"
             fi
             ;;
-        *) ;;
+        *)
             if ! (( $+commands[${command}] )); then
                 print "The ${command} command was not found on your path.\n"
                 print "Please install it manually.\n"
             fi
+            ;;
     esac
 }
 
