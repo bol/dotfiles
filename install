@@ -2,29 +2,32 @@
 
 setopt err_exit nounset warncreateglobal typesetsilent
 
-typeset -g DOTFILEDIR=$(cd $(dirname $0);pwd)
+typeset -g DOTFILEDIR=$(
+                        cd $(dirname $0)
+                                         pwd
+)
 
 function link_conf() {
-	local source="$1"
-	local target="$2"
+  local source="$1"
+  local target="$2"
 
-	if [ -e "$target" ];then
-	  echo -e "\t\e[3mSkipping ${target}\e[0m"
-	  return
+  if [ -e "$target" ]; then
+    echo -e "\t\e[3mSkipping ${target}\e[0m"
+    return
   fi
-	[ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
   echo -e "\tLinking ${target}"
   ln -s $source "$target"
 }
 
 function copy_conf() {
-	local source="$1"
-	local target="$2"
+  local source="$1"
+  local target="$2"
 
-	if [ -e "$target" ];then
-	  echo -e "\t\e[3mSkipping ${target}\e[0m"
-	  return
+  if [ -e "$target" ]; then
+    echo -e "\t\e[3mSkipping ${target}\e[0m"
+    return
   fi
   [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
@@ -36,9 +39,9 @@ function git_clone() {
   local source="$1"
   local target="$2"
 
-	if [ -e "$target" ];then
-	  echo -e "\t\e[3mSkipping ${target}\e[0m"
-	  return
+  if [ -e "$target" ]; then
+    echo -e "\t\e[3mSkipping ${target}\e[0m"
+    return
   fi
   [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
@@ -50,9 +53,9 @@ function http_get() {
   local source="$1"
   local target="$2"
 
-	if [ -e "$target" ];then
-	  echo -e "\t\e[3mSkipping ${target}\e[0m"
-	  return
+  if [ -e "$target" ]; then
+    echo -e "\t\e[3mSkipping ${target}\e[0m"
+    return
   fi
   [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
 
@@ -60,9 +63,9 @@ function http_get() {
   curl -fqsSL -o "${target}" "${source}"
 }
 
-local -a modules_to_install
+typeset -a modules_to_install
 
-if (( $# == 0 )); then
+if (($# == 0)); then
   for dir in ${DOTFILEDIR}/*/install.zsh; do
     modules_to_install+=($(basename $(dirname "$dir")))
   done
@@ -70,16 +73,15 @@ else
   modules_to_install+=($@)
 fi
 
-
 for module in ${modules_to_install}; do
     echo "Installing ${module} module"
-    local install_script="${DOTFILEDIR}/${module}/install.zsh"
+    install_script="${DOTFILEDIR}/${module}/install.zsh"
 
-        if [ -e "${install_script}" ]; then
-            # shellcheck source=./*/install
-            source "${install_script}" $(dirname "${install_script}")
-        else
-            echo "No such module: ${module}"
-            exit 1
-        fi
+    if [ -e "${install_script}" ]; then
+        # shellcheck source=./*/install
+        source "${install_script}" $(dirname "${install_script}")
+    else
+        echo "No such module: ${module}"
+        exit 1
+    fi
 done
