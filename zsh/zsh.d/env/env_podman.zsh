@@ -19,19 +19,20 @@ function activate_podman() {
 
   alias pm="podman"
   alias compose="podman-compose"
+
   function pm-machine-reset() {
     machine_found=0
     machine_running=0
-    for line in "${(@f)$(podman machine list --noheading --format '{{range .}}{{.Name}}\t{{.LastUp}}\n{{end -}}')}"; do
+    for line in "${(@f)$(podman machine list --noheading --format '{{range .}}{{.Name}}\t{{.LastUp}}\n{{end -}}' )}"; do
       [[ -z "${line}" ]] && continue
       IFS=$'\t' read -A machine <<< "$line"
       machine_found=1
       [[ "${machine[2]}" == 'Currently running' ]] && machine_running=1
     done
-    if ! (( $machine_running )); then
+    if (( $machine_running )); then
       podman machine stop
     fi
-    if ! (( $machine_found )); then
+    if (( $machine_found )); then
       podman machine rm --force podman-machine-default
     fi
 
@@ -58,11 +59,11 @@ function activate_podman() {
         machine_found=1
         [[ "${machine[2]}" == 'Currently running' ]] && machine_running=1
       done
-      if ! (( $machine_found )); then
+      if (( ! $machine_found )); then
         read -q "?There is currently no podman vm. Do you want to create one? " || return -1
         print ''
         pm-machine-reset
-      elif ! (( $machine_running)); then
+      elif (( ! $machine_running)); then
         read -q "?Your podman vm is currently not running. Do you want to start it? " || return -1
         print ''
         podman machine start
