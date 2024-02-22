@@ -7,7 +7,7 @@ if [[ ! -e "${ZINIT_HOME}" ]]; then
 fi
 source "${ZINIT_HOME}/zinit.zsh"
 
-for script in "${HOME}"/.zsh.d/*.zsh; do
+for script in "${HOME}"/.zsh.d/{bootstrap,,tooling,env}/*.zsh; do
     source $script
 done
 
