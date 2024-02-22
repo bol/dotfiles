@@ -10,7 +10,7 @@ local config = {
 }
 
 if wezterm.target_triple == 'aarch64-apple-darwin' or wezterm.target_triple == 'x86_64-apple-darwin' then
-    config.default_prog = { '/opt/homebrew/bin/tmux' }
+    config.default_prog = { '/opt/homebrew/bin/zsh' }
 else
     config.default_prog = { '/usr/bin/env', 'zsh' }
 end
