@@ -1,2 +1,0 @@
-tic $1/xterm-256color.terminfo
-tic $1/tmux-256color.terminfo
