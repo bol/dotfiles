@@ -1,12 +1,12 @@
 #!/usr/bin/env zsh
 
-set -euo pipefail
+setopt err_exit nounset warncreateglobal typesetsilent
 
 DOTFILEDIR=$(cd $(dirname $0);pwd)
 
 function link_conf() {
-	source="$1"
-	target="$2"
+	local source="$1"
+	local target="$2"
 
 	if [ -e "$target" ];then
 	  echo -e "\t\e[3mSkipping ${target}\e[0m"
@@ -19,8 +19,8 @@ function link_conf() {
 }
 
 function copy_conf() {
-	source="$1"
-	target="$2"
+	local source="$1"
+	local target="$2"
 
 	if [ -e "$target" ];then
 	  echo -e "\t\e[3mSkipping ${target}\e[0m"
@@ -33,8 +33,8 @@ function copy_conf() {
 }
 
 function git_clone() {
-  source="$1"
-  target="$2"
+  local source="$1"
+  local target="$2"
 
 	if [ -e "$target" ];then
 	  echo -e "\t\e[3mSkipping ${target}\e[0m"
@@ -47,8 +47,8 @@ function git_clone() {
 }
 
 function http_get() {
-  source="$1"
-  target="$2"
+  local source="$1"
+  local target="$2"
 
 	if [ -e "$target" ];then
 	  echo -e "\t\e[3mSkipping ${target}\e[0m"

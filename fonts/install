@@ -1,18 +1,18 @@
 function install_font() {
-    font="$1"
+    local font="$1"
 
     case "$(uname -s)" in
         Darwin)
-            font_dir="${HOME}/Library/Fonts"
+            local font_dir="${HOME}/Library/Fonts"
             ;;
         *)
-            font_dir="${HOME}/.local/share/fonts"
+            local font_dir="${HOME}/.local/share/fonts"
             ;;
     esac
 
-    base_path="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.3.3/patched-fonts"
-    source="${base_path}/${font// /%20}"
-    target="${font_dir}/${font}"
+    local base_path="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.3.3/patched-fonts"
+    local source="${base_path}/${font// /%20}"
+    local target="${font_dir}/${font}"
 
     http_get "${source}" ${target}
 }
