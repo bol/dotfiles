@@ -7,6 +7,7 @@ local config = {
     font_size = 16.0,
     hide_tab_bar_if_only_one_tab = true,
     audible_bell = "Disabled",
+    window_close_confirmation = "NeverPrompt",
 }
 
 if wezterm.target_triple == 'aarch64-apple-darwin' or wezterm.target_triple == 'x86_64-apple-darwin' then
