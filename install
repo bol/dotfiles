@@ -63,7 +63,7 @@ function http_get() {
 local -a modules_to_install
 
 if (( $# == 0 )); then
-  for dir in ${DOTFILEDIR}/*/install; do
+  for dir in ${DOTFILEDIR}/*/install.zsh; do
     modules_to_install+=($(basename $(dirname "$dir")))
   done
 else
@@ -73,7 +73,7 @@ fi
 
 for module in ${modules_to_install}; do
     echo "Installing ${module} module"
-    local install_script="${DOTFILEDIR}/${module}/install"
+    local install_script="${DOTFILEDIR}/${module}/install.zsh"
 
         if [ -e "${install_script}" ]; then
             # shellcheck source=./*/install

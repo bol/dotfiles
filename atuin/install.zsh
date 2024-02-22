@@ -1,6 +1,6 @@
 link_conf $1/config.toml $HOME/.config/atuin/config.toml
 
-if ! (( $+commands[atuin] )); then
+if ! (($+commands[atuin])); then
     print "The atuin command was not found on your path.\n"
     case "$(uname -s)" in
         Darwin)
@@ -8,7 +8,6 @@ if ! (( $+commands[atuin] )); then
           print ''
           brew install atuin
             ;;
-        *)
-            ;;
-    esac
+        *)  ;;
+  esac
 fi

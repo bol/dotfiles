@@ -8,7 +8,7 @@ function install_font() {
         *)
             local font_dir="${HOME}/.local/share/fonts"
             ;;
-    esac
+  esac
 
     local base_path="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.3.3/patched-fonts"
     local source="${base_path}/${font// /%20}"

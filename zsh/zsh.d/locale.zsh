@@ -1,6 +1,6 @@
 set_if_unset() {
-  KEY="${1}"
-  VALUE="${2}"
+  local KEY="${1}"
+  local VALUE="${2}"
 
   if [[ -z "${(P)KEY}" ]]; then
     export "${KEY}"="${VALUE}"
