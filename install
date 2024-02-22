@@ -2,7 +2,7 @@
 
 setopt err_exit nounset warncreateglobal typesetsilent
 
-DOTFILEDIR=$(cd $(dirname $0);pwd)
+typeset -g DOTFILEDIR=$(cd $(dirname $0);pwd)
 
 function link_conf() {
 	local source="$1"
@@ -64,16 +64,16 @@ local -a modules_to_install
 
 if (( $# == 0 )); then
   for dir in ${DOTFILEDIR}/*/install; do
-    modules_to_install+=$(basename $(dirname "$dir"))
+    modules_to_install+=($(basename $(dirname "$dir")))
   done
 else
-  modules_to_install+=$@
+  modules_to_install+=($@)
 fi
 
 
 for module in ${modules_to_install}; do
     echo "Installing ${module} module"
-    install_script="${DOTFILEDIR}/${module}/install"
+    local install_script="${DOTFILEDIR}/${module}/install"
 
         if [ -e "${install_script}" ]; then
             # shellcheck source=./*/install
