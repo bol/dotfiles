@@ -74,15 +74,23 @@ function tf_info() {
 add-zsh-hook -Uz precmd tf_info
 
 function aws_info() {
-  local aws_profile expiration is_active
-  expiration=$(strftime -r '%FT%T' ${AWSUME_EXPIRATION:-1970-01-01T00:00:00})
-  if [[ $EPOCHSECONDS -ge $expiration ]]; then
-    aws_profile="%F{239}${AWSUME_PROFILE:-<none>}"
-  else
-    aws_profile="%F{022}${AWSUME_PROFILE:-<none>}"
-  fi
+  local aws_profile expiration
+  aws_profile=${AWS_PROFILE:-default}
 
-  aws_prompt="%K{239}%F{244}%K{244}%F{214}%F{239}:${aws_profile}%K{239}%F{244}"
+#  Session expiration calculation is too costly to use in prompt. The AWS cli command consumes  up to 300ms.
+
+#  local ts=$(aws configure get "${aws_profile}".x_session_expires)
+#  local tss=${ts:0:-3}${ts:(-2)}
+#
+#  expiration=$(strftime -r '%FT%T%z' ${tss:-1970-01-01T00:0000})
+#
+#  if [[ $EPOCHSECONDS -ge $expiration ]]; then
+#    aws_prompt_profile="%F{239}<expired>"
+#  else
+    aws_prompt_profile="%F{022}${aws_profile:-default}"
+#  fi
+
+  aws_prompt="%K{239}%F{244}%K{244}%F{214}%F{239}${aws_prompt_profile}%K{239}%F{244}"
 }
 
 add-zsh-hook -Uz precmd aws_info
