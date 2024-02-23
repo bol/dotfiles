@@ -19,10 +19,11 @@ function activate_podman() {
 
   alias pm="podman"
   alias compose="podman-compose"
+  [[ "$(uname -s)" == "Darwin" ]] && export CONTAINERS_MACHINE_PROVIDER='applehv'
 
   function pm-machine-reset() {
-    machine_found=0
-    machine_running=0
+    local machine_found=0
+    local machine_running=0
     for line in "${(@f)$(podman machine list --noheading --format '{{range .}}{{.Name}}\t{{.LastUp}}\n{{end -}}' )}"; do
       [[ -z "${line}" ]] && continue
       IFS=$'\t' read -A machine <<< "$line"
@@ -30,16 +31,24 @@ function activate_podman() {
       [[ "${machine[2]}" == 'Currently running' ]] && machine_running=1
     done
     if (( $machine_running )); then
+      echo "Stopping previous VM"
       podman machine stop
     fi
     if (( $machine_found )); then
+      echo "Removing previous VM"
       podman machine rm --force podman-machine-default
     fi
 
-    podman machine init --cpus=2 --disk-size=20 --memory 4096 && \
-      podman machine set --rootful && \
-      podman machine start && \
-      podman machine ssh "sudo rpm-ostree install podman-docker qemu-user-static && sudo systemctl reboot"
+    # Install qemu-user-static for multi arch support
+    echo "Initializing new VM"
+    podman machine init \
+      --cpus=2 \
+      --disk-size=20 \
+      --memory 4096 \
+      --rootful \
+      --now && \
+      podman machine ssh 'sudo rpm-ostree install qemu-user-static && sudo systemctl reboot' &&
+      podman machine start
   }
 
   # Configure privileged mode for testcontainers Ryuk.
