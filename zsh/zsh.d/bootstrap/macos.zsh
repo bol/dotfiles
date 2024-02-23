@@ -11,9 +11,13 @@ function __setup_macos() {
 
   # Install utilities
   __ensure_package_is_installed coreutils
+  __ensure_package_is_installed openssl
+  __ensure_package_is_installed grep
 
   # Prefer OpenSSL over the Apple LibreSSL
   [[ -e /opt/homebrew/opt/openssl/bin ]] && path=('/opt/homebrew/opt/openssl/bin' $path)
+  # Prefer Homebrew OpenSSH over the Apple package version
+  [[ -e /opt/homebrew/opt/openssh/bin ]] && path=('/opt/homebrew/opt/openssh/bin' $path)
   # Prefer GNU coreutils over the Apple BSD ones
   [[ -e /opt/homebrew/opt/coreutils/libexec/gnubin ]] && path=('/opt/homebrew/opt/coreutils/libexec/gnubin' $path)
 }
