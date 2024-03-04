@@ -77,7 +77,7 @@ function aws_info() {
   local aws_profile expiration
   aws_profile=${AWS_PROFILE:-default}
 
-#  Session expiration calculation is too costly to use in prompt. The AWS cli command consumes  up to 300ms.
+#  Session expiration calculation is too costly to use in prompt. The AWS cli command takes 300ms to parse a 1k TOML file on my recent M2 MBP.
 
 #  local ts=$(aws configure get "${aws_profile}".x_session_expires)
 #  local tss=${ts:0:-3}${ts:(-2)}
