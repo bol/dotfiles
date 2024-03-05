@@ -16,3 +16,5 @@ vim.bo.tabstop = 4 -- Number of spaces in a tab
 -- Options
 vim.opt.termguicolors = true
 vim.opt.encoding = "UTF-8" -- Set the encoding type
+vim.opt.mouse = "" -- Disable mouse
+
