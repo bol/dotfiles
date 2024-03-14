@@ -13,9 +13,9 @@ function __ensure_package_is_installed() {
 
     case "$(uname -s)" in
         Darwin)
-            if ! [[ -d "/opt/homebrew/opt/${command}" ]]; then
-                print "The ${command} command was not found on your path.\n"
-                read -q "?Do you want to install ${package} with Homebrew? " || return -1
+            if ! [[ -d "/opt/homebrew/opt/${package}" ]]; then
+                print "The ${package} homebrew package is not installed.\n"
+                read -q "?Do you want to install it? " || return -1
                 print ''
                 brew install "${package}"
             fi
