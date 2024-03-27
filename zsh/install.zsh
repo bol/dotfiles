@@ -1,3 +1,5 @@
+0=${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}
+
 link_conf $1/zshenv $HOME/.zshenv
 link_conf $1/zshrc $HOME/.zshrc
 copy_conf $1/zshrc_local $HOME/.zshrc_local

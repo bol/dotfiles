@@ -1,3 +1,5 @@
+0=${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}
+
 function install_font() {
     local font="$1"
 

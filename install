@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
-setopt err_exit nounset warncreateglobal typesetsilent
+0=${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}
+builtin emulate -L zsh -o extendedglob -o noshortloops \
+                        -o warncreateglobal -o typesetsilent \
+                        -o nopromptsubst
 
-typeset -g DOTFILEDIR=$(
-                        cd $(dirname $0)
-                                         pwd
-)
+typeset -g DOTFILEDIR=$(cd $(dirname $0);pwd)
 
 function link_conf() {
   local source="$1"
@@ -63,25 +63,34 @@ function http_get() {
   curl -fqsSL -o "${target}" "${source}"
 }
 
-typeset -a modules_to_install
+function install_module() {
+    readonly module="${1}"
+    readonly install_script="${DOTFILEDIR}/${module}/install.zsh"
 
-if (($# == 0)); then
-  for dir in ${DOTFILEDIR}/*/install.zsh; do
-    modules_to_install+=($(basename $(dirname "$dir")))
-  done
-else
-  modules_to_install+=($@)
-fi
-
-for module in ${modules_to_install}; do
     echo "Installing ${module} module"
-    install_script="${DOTFILEDIR}/${module}/install.zsh"
 
-    if [ -e "${install_script}" ]; then
-        # shellcheck source=./*/install
-        source "${install_script}" $(dirname "${install_script}")
-    else
-        echo "No such module: ${module}"
-        exit 1
+    if [ ! -e "${install_script}" ]; then
+              echo "No such module: ${module}"
+              exit 1
     fi
-done
+
+    source "${install_script}" $(dirname "${install_script}")
+}
+
+install() {
+  local -a modules_to_install
+  local dir module
+
+  if (($# == 0)); then
+    for dir in ${DOTFILEDIR}/*/install.zsh; do
+      modules_to_install+=($(basename $(dirname "$dir")))
+    done
+  else
+    modules_to_install+=($@)
+  fi
+  for module in ${modules_to_install}; do
+    install_module "${module}"
+  done
+}
+
+install
