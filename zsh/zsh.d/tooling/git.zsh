@@ -2,3 +2,4 @@ zinit ice as"program" pick"$ZPFX/bin/git-*" src"etc/git-extras-completion.zsh" m
 zinit light tj/git-extras
 
 __ensure_package_is_installed delta git-delta
+__ensure_package_is_installed difftastic
