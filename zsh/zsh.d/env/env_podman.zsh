@@ -6,6 +6,7 @@ function activate_podman() {
       __ensure_package_is_installed "${cmd}"
   done
 
+  podman completion -f "${fpath[1]}/_podman" zsh
   alias pm="podman"
   alias compose="podman-compose"
   [[ "$(uname -s)" == "Darwin" ]] && export CONTAINERS_MACHINE_PROVIDER='applehv'
