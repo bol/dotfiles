@@ -7,7 +7,7 @@ set_if_unset() {
   fi
 }
 
-# Set a sensible default of english language and Swedish units if locale is not set.
+# Use english language and Swedish units if not set otherwise.
 set_if_unset 'LANG' 'en_US.UTF-8'
 set_if_unset 'LC_MEASUREMENT' 'sv_SE.UTF-8'
 set_if_unset 'LC_MONETARY' 'sv_SE.UTF-8'
