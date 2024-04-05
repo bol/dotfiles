@@ -9,12 +9,12 @@ function activate_markup() {
   # https://github.com/stedolan/jq/issues/1931
   alias jq='gojq'
   # Colorize JSON
-  alias jc="bat --language JSON --theme 'Solarized (dark)' --style=plain"
+  alias jc='bat --language JSON'
   # Convert JSON to YAML
   alias j2y='gojq --yaml-output'
 
   # Query YAML
   alias yq='gojq --yaml-output --yaml-input'
   # Colorize YAML
-  alias yc="bat --language YAML --theme 'Solarized (dark)' --style=plain"
+  alias yc='bat --language YAML'
 }
