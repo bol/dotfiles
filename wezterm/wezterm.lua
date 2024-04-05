@@ -5,6 +5,36 @@ local config = {
 
     font = wezterm.font("MesloLGM Nerd Font", { weight = "Regular", stretch = "Normal", style = "Normal" }),
     font_size = 16.0,
+    font_rules = {
+        {
+            intensity = 'Bold',
+            style = 'Normal',
+            font = wezterm.font("MesloLGM Nerd Font", {
+                weight = "Bold",
+                stretch = "Normal",
+                style = "Normal"
+            }),
+        },
+        {
+            intensity = 'Normal',
+            style = 'Italic',
+            font = wezterm.font("MesloLGM Nerd Font", {
+                weight = "Regular",
+                stretch = "Normal",
+                style = "Italic"
+            }),
+        },
+        {
+            intensity = 'Bold',
+            style = 'Italic',
+            font = wezterm.font("MesloLGM Nerd Font", {
+                weight = "Bold",
+                stretch = "Normal",
+                style = "Italic"
+            }),
+        },
+    },
+
     hide_tab_bar_if_only_one_tab = true,
     audible_bell = "Disabled",
     window_close_confirmation = "NeverPrompt",
