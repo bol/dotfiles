@@ -8,29 +8,29 @@ local config = {
     font_rules = {
         {
             intensity = 'Bold',
-            style = 'Normal',
+            italic = false,
             font = wezterm.font("MesloLGM Nerd Font", {
                 weight = "Bold",
                 stretch = "Normal",
-                style = "Normal"
+                style = "Normal",
             }),
         },
         {
             intensity = 'Normal',
-            style = 'Italic',
+            italic = true,
             font = wezterm.font("MesloLGM Nerd Font", {
                 weight = "Regular",
                 stretch = "Normal",
-                style = "Italic"
+                style = "Italic",
             }),
         },
         {
             intensity = 'Bold',
-            style = 'Italic',
+            italic = true,
             font = wezterm.font("MesloLGM Nerd Font", {
                 weight = "Bold",
                 stretch = "Normal",
-                style = "Italic"
+                style = "Italic",
             }),
         },
     },
