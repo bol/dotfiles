@@ -26,9 +26,7 @@ function activate_podman() {
       --disk-size=20 \
       --memory 4096 \
       --rootful \
-      --now && \
-      podman machine ssh 'sudo rpm-ostree install qemu-user-static && sudo systemctl reboot' &&
-      podman machine start
+      --now
   }
 
   # Configure privileged mode for testcontainers Ryuk.
