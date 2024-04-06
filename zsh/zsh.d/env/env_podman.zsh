@@ -2,13 +2,11 @@
 # Using Podman for local container handling.
 
 function activate_podman() {
-  for cmd in podman podman-compose; do
-      __ensure_package_is_installed "${cmd}"
-  done
+  __ensure_package_is_installed podman
 
   podman completion -f "${fpath[1]}/_podman" zsh
   alias pm="podman"
-  alias compose="podman-compose"
+
   [[ "$(uname -s)" == "Darwin" ]] && export CONTAINERS_MACHINE_PROVIDER='applehv'
 
   function pm-machine-reset() {
@@ -20,14 +18,6 @@ function activate_podman() {
       machine_found=1
       [[ "${machine[2]}" == 'Currently running' ]] && machine_running=1
     done
-    if (( $machine_running )); then
-      echo "Stopping previous VM"
-      podman machine stop
-    fi
-    if (( $machine_found )); then
-      echo "Removing previous VM"
-      podman machine rm --force podman-machine-default
-    fi
 
     # Install qemu-user-static for multi arch support
     echo "Initializing new VM"
