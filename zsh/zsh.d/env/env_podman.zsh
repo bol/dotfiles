@@ -15,8 +15,13 @@ function activate_podman() {
     for line in "${(@f)$(podman machine list --noheading --format '{{range .}}{{.Name}}\t{{.LastUp}}\n{{end -}}' )}"; do
       [[ -z "${line}" ]] && continue
       IFS=$'\t' read -A machine <<< "$line"
-      machine_found=1
-      [[ "${machine[2]}" == 'Currently running' ]] && machine_running=1
+
+      [[ "${machine[2]}" == 'Currently running' ]] && {
+        echo "Stopping previous VM ${machine[1]}"
+        podman machine stop "${machine[1]}"
+      }
+      echo "Removing previous VM ${machine[1]}"
+      podman machine rm --force "${machine[1]}"
     done
 
     # Install qemu-user-static for multi arch support
