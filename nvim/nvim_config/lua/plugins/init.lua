@@ -7,7 +7,6 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   local plugins = {
-    'plugins.filetype',
     'plugins.theme',
     'plugins.treesitter',
   }
