@@ -20,6 +20,8 @@ function __setup_macos() {
   [[ -e /opt/homebrew/opt/openssh/bin ]] && path=('/opt/homebrew/opt/openssh/bin' $path)
   # Prefer GNU coreutils over the Apple BSD ones
   [[ -e /opt/homebrew/opt/coreutils/libexec/gnubin ]] && path=('/opt/homebrew/opt/coreutils/libexec/gnubin' $path)
+  # Prefer Homebrew cURL over the Apple package version
+  [[ -e /opt/homebrew/opt/curl/bin ]] && path=('/opt/homebrew/opt/curl/bin' $path)
 }
 
 [[ "$(uname -s)" == "Darwin" ]] && __setup_macos
