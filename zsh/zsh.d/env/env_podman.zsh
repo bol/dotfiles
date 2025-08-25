@@ -24,12 +24,11 @@ function activate_podman() {
       podman machine rm --force "${machine[1]}"
     done
 
-    # Install qemu-user-static for multi arch support
     echo "Initializing new VM"
     podman machine init \
-      --cpus=2 \
-      --disk-size=20 \
-      --memory 4096 \
+      --cpus=4 \
+      --disk-size=100 \
+      --memory 12288 \
       --rootful \
       --now
   }
