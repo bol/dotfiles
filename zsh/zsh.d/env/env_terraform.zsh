@@ -1,8 +1,7 @@
-function activate_tfenv() {
-    [[ -e $HOME/.tfenv ]] || {
-        read -q '?$HOME/.tfenv does not exist, do you want to install it? ' || return -1
-            print '\ninstalling tfenv'
-            git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv
-        }
-    path+="$HOME/.tfenv/bin"
+function activate_tenv() {
+  __ensure_package_is_installed
+  COMPLETION_PATH=$(mktemp -q)
+  tenv completion zsh > "${COMPLETION_PATH}"
+  source "${COMPLETION_PATH}"
+  rm -f "${COMPLETION_PATH}"
 }
