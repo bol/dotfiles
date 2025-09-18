@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 0=${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}
+
 builtin emulate -L zsh -o extendedglob -o noshortloops \
                         -o warncreateglobal -o typesetsilent \
                         -o nopromptsubst
@@ -64,20 +65,20 @@ function http_get() {
 }
 
 function install_module() {
-    readonly module="${1}"
-    readonly install_script="${DOTFILEDIR}/${module}/install.zsh"
+  readonly module="${1}"
+  readonly install_script="${DOTFILEDIR}/${module}/install.zsh"
 
-    echo "Installing ${module} module"
+  echo "Installing ${module} module"
 
-    if [ ! -e "${install_script}" ]; then
-              echo "No such module: ${module}"
-              exit 1
-    fi
+  if [ ! -e "${install_script}" ]; then
+            echo "No such module: ${module}"
+            exit 1
+  fi
 
-    source "${install_script}" $(dirname "${install_script}")
+  source "${install_script}" $(dirname "${install_script}")
 }
 
-install() {
+function install() {
   local -a modules_to_install
   local dir module
 
@@ -88,9 +89,10 @@ install() {
   else
     modules_to_install+=($@)
   fi
+
   for module in ${modules_to_install}; do
     install_module "${module}"
   done
 }
 
-install
+install "$@"
