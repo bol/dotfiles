@@ -8,7 +8,7 @@ To use, clone the repository and run the install script. This symlinks in the co
 
 ```
 git clone https://github.com/bol/dotfiles.git
-cd dotfiles && ./install`
+cd dotfiles && ./install
 ```
 ## Modules
 See the individual modules for descriptions and usage.

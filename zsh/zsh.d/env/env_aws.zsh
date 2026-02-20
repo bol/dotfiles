@@ -1,21 +1,12 @@
 function activate_aws() {
-  aws_path='/usr/local/bin'
-  if (( ! $path[(Ie)$aws_path])); then
-    path+="$aws_path"
-  fi
+  __ensure_package_is_installed aws awscli || return 1
 
-  if ! type aws >/dev/null; then
-    read -q '?aws cli is not on the path, do you want to install it? ' || return 1
-    updateawscli
+  if ! (( $+commands[aws] )); then
+    print "The aws command was not found on your path.\n"
+    return 1
   fi
 
   autoload -Uz bashcompinit && bashcompinit
 
   complete -C aws_completer aws
-}
-
-function updateawscli() {
-  curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-  sudo installer -pkg AWSCLIV2.pkg -target /
-  rm AWSCLIV2.pkg
 }

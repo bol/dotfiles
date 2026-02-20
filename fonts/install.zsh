@@ -16,7 +16,7 @@ function install_font() {
     local source="${base_path}/${font// /%20}"
     local target="${font_dir}/${font}"
 
-    http_get "${source}" ${target}
+    http_get "${source}" "${target}"
 }
 
 install_font "Meslo/M/Regular/complete/Meslo LG M Regular Nerd Font Complete.ttf"

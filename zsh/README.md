@@ -23,7 +23,7 @@ Activated with `activate_aws`. Install the AWS CLI and command completions.
 ### GCP
 Activated with `activate_gcloud`. Install the GCP CLI and command completions.
 ### Go
-Activated with `activate_go`. Installs and initializes [Goenv](https://github.com/syndbg/goenv.git) for go version management.
+Activated with `activate_goenv`. Installs and initializes [Goenv](https://github.com/syndbg/goenv.git) for go version management.
 ### Java
 Activated with `activate_sdkman`. Installs and initializes [Sdkman](https://get.sdkman.io) for java version management.
 ### Kubernetes
@@ -34,7 +34,7 @@ Provides some aliases.
 Support for working with markup files.
 Activated with `activate_markup`. Installs [Gojq](https://github.com/itchyny/gojq) and [Bat](https://github.com/sharkdp/bat) and sets up aliases.
 ### Node.js
-Activated with `activate_nodenv`. Installs and initializes [nodeenv](https://github.com/ekalinin/nodeenv) for node.js version management.
+Activated with `activate_nodenv`. Installs and initializes [nodenv](https://github.com/nodenv/nodenv) for node.js version management.
 ### Podman
 Activated with `activate_podman`. Installs Podman and command completions.
 
