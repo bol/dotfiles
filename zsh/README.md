@@ -14,7 +14,7 @@ activate_k8s
 activate_markup
 activate_podman
 activate_sdkman
-activate_tfenv
+activate_tenv
 ```
 ## Environment support
 The module contains for option support for environments. These are not loaded by default and must be activated with `activate_<name>` to use.
@@ -46,4 +46,4 @@ Activated with `activate_rbenv`. Installs and initializes [rbenv](https://github
 ### Rust
 Activated with `activate_rustup`. Installs and initializes cargo
 ### Terraform
-Activated with `activate_tfenv`. Installs and initializes [tfenv](https://github.com/tfutils/tfenv) for Terraform version management.
+Activated with `activate_tenv`. Installs and initializes [tenv](https://github.com/tofuutils/tenv) for Terraform version management.
