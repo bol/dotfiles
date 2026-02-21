@@ -2,9 +2,18 @@
 # Using Podman for local container handling.
 
 function activate_podman() {
+  local completion_file
+
   __ensure_package_is_installed podman
 
-  podman completion -f "${fpath[1]}/_podman" zsh
+  completion_file="${fpath[1]}/_podman"
+  if ! podman completion -f "${completion_file}" zsh; then
+    print "Failed to generate podman completion at ${completion_file}.\n"
+    return 1
+  fi
+  autoload -Uz "${completion_file:t}"
+  compdef "${completion_file:t}" podman
+
   alias pm="podman"
 
   [[ "$(uname -s)" == "Darwin" ]] && export CONTAINERS_MACHINE_PROVIDER='applehv'
