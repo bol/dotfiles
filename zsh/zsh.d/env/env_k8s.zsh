@@ -1,7 +1,15 @@
 function activate_k8s() {
+  local completion_path
+
   __ensure_package_is_installed kubectl || return 1
 
-  [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+  __zsh_completion_file_for kubectl || return 1
+  completion_path="${REPLY}"
+  if ! kubectl completion zsh > "${completion_path}"; then
+    print "Failed to generate kubectl completion at ${completion_path}.\n"
+    return 1
+  fi
+  source "${completion_path}" || return 1
 
   alias k="kubectl"
   alias kg="kubectl get"

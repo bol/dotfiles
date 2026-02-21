@@ -19,7 +19,7 @@ activate_tenv
 ## Environment support
 The module contains for option support for environments. These are not loaded by default and must be activated with `activate_<name>` to use.
 ### AWS
-Activated with `activate_aws`. Install the AWS CLI and command completions.
+Activated with `activate_aws`. Install the AWS CLI and command completions. Uses AWS official bash-compatible completion in zsh.
 ### GCP
 Activated with `activate_gcloud`. Install the GCP CLI and command completions.
 ### Go

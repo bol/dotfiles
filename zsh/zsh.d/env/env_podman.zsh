@@ -2,20 +2,12 @@
 # Using Podman for local container handling.
 
 function activate_podman() {
-  local completion_dir completion_file
+  local completion_file
 
   __ensure_package_is_installed podman || return 1
 
-  completion_dir="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/completions"
-  mkdir -p "${completion_dir}" || {
-    print "Failed to create podman completion directory ${completion_dir}.\n"
-    return 1
-  }
-  if (( ${fpath[(Ie)${completion_dir}]} == 0 )); then
-    fpath=("${completion_dir}" $fpath)
-  fi
-
-  completion_file="${completion_dir}/_podman"
+  __zsh_completion_file_for podman || return 1
+  completion_file="${REPLY}"
   if ! podman completion -f "${completion_file}" zsh; then
     print "Failed to generate podman completion at ${completion_file}.\n"
     return 1
