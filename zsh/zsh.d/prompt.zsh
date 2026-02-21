@@ -19,21 +19,25 @@ zstyle ':vcs_info:*' actionformats '%K{239}%F{244}%K{244}%F{022}%b%m%c%u%F
 zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
 function +vi-git-status(){
-    local untracked ahead behind
+    local line untracked ahead behind ab
     local -a gitstatus
 
-    ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
-    (( $ahead )) && gitstatus+=( "%F{019}↑${ahead}" )
-
-    behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
-    (( $behind )) && gitstatus+=( "%F{124}↓${behind}" )
-
-
-    while IFS=$'\n' read line; do
-        if [[ "$line" =~ '^\?\? ' ]]; then
-            [[ -n $untracked ]] && continue || untracked='yes'
+    while IFS=$'\n' read -r line; do
+        if [[ $line == '# branch.ab '* ]]; then
+            ab=${line#\# branch.ab }
+            ahead=${ab%% *}
+            behind=${ab##* }
+            ahead=${ahead#+}
+            behind=${behind#-}
+            (( ahead > 0 )) && gitstatus+=( "%F{019}↑${ahead}" )
+            (( behind > 0 )) && gitstatus+=( "%F{124}↓${behind}" )
+            continue
         fi
-    done < <(git status --porcelain 2> /dev/null)
+
+        if [[ $line == '? '* ]]; then
+            untracked='yes'
+        fi
+    done < <(git status --porcelain=2 --branch 2> /dev/null)
 
     [[ -n $untracked ]] && hook_com[unstaged]+='%F{241}…%f'
     hook_com[misc]+=${(j:/:)gitstatus}
@@ -42,10 +46,17 @@ function +vi-git-status(){
 add-zsh-hook -Uz precmd vcs_info
 
 function k8s_info() {
-  local current_cluster current_namespace current_context
+  local current_cluster current_namespace current_context current_state
 
-  current_cluster=$(kubectl config view --minify --output 'jsonpath={.current-context}' 2>/dev/null || echo '')
-  current_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null || echo '')
+  if ! (( $+commands[kubectl] )); then
+    current_cluster=''
+    current_namespace=''
+  elif current_state=$(kubectl config view --minify --output 'jsonpath={.current-context}{"\t"}{..namespace}' 2>/dev/null); then
+    IFS=$'\t' read -r current_cluster current_namespace <<< "${current_state}"
+  else
+    current_cluster=''
+    current_namespace=''
+  fi
 
   # Shorten full EKS cluster ARNs to only the name
   if [[ ${current_cluster} != '' && ${current_cluster[1,11]} = 'arn:aws:eks' ]]; then
