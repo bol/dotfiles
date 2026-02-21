@@ -71,13 +71,13 @@ function k8s_info() {
     current_context="$current_cluster:$current_namespace"
   fi
 
-  k8s_prompt="%K{239}%F{244}%K{244}%F{021}☸%F{239}${current_context}%K{239}%F{244}"
+  psvar[2]="${current_context}"
 }
 
 add-zsh-hook -Uz precmd k8s_info
 
 function aws_info() {
-  local aws_profile expiration
+  local aws_profile aws_prompt_profile expiration
   aws_profile=${AWS_PROFILE:-default}
 
 #  Session expiration calculation is too costly to use in prompt. The AWS cli command takes 300ms to parse a 1k TOML file on my recent M2 MBP.
@@ -90,13 +90,13 @@ function aws_info() {
 #  if [[ $EPOCHSECONDS -ge $expiration ]]; then
 #    aws_prompt_profile="%F{239}<expired>"
 #  else
-    aws_prompt_profile="%F{022}${aws_profile:-default}"
+    aws_prompt_profile="${aws_profile:-default}"
 #  fi
 
-  aws_prompt="%K{239}%F{244}%K{244}%F{214}%F{239}${aws_prompt_profile}%K{239}%F{244}"
+  psvar[1]="${aws_prompt_profile}"
 }
 
 add-zsh-hook -Uz precmd aws_info
 
 NEWLINE=$'\n'
-PROMPT='${aws_prompt} ${k8s_prompt} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
+PROMPT='%K{239}%F{244}%K{244}%F{214}%F{239}%1v%K{239}%F{244} %K{239}%F{244}%K{244}%F{021}☸%F{239}%2v%K{239}%F{244} %2~ ${vcs_info_msg_0_} %F{239}%k${NEWLINE}%f%k '
