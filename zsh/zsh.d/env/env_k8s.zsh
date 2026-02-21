@@ -13,7 +13,7 @@ function activate_k8s() {
   if ! (( $+commands[kubectl-krew] )); then
       read -q '?krew is not on the path, do you want to install it? ' || return 1
       (
-        set -x; cd "$(mktemp -d)" &&
+        cd "$(mktemp -d)" &&
         OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
         ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
         KREW="krew-${OS}_${ARCH}" &&

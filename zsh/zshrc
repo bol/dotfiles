@@ -2,7 +2,7 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 if [[ ! -e "${ZINIT_HOME}" ]]; then
     read -q "?$ZINIT_HOME does not exist, do you want to install it? " || return -1
     print '\ninstalling zinit'
-    mkdir -p "$(dirname $ZINIT_HOME)"
+    mkdir -p "$(dirname "$ZINIT_HOME")"
     git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 source "${ZINIT_HOME}/zinit.zsh"
@@ -29,8 +29,8 @@ function __ensure_package_is_installed() {
     esac
 }
 
-for script in "${HOME}"/.zsh.d/{bootstrap,,tooling,env}/*.zsh; do
-    source $script
+for script in "${HOME}"/.zsh.d/{bootstrap,,tooling,env}/*.zsh(N); do
+    source "${script}"
 done
 
 source "${HOME}/.zshrc_local"
