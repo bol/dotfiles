@@ -1,2 +1,3 @@
 setopt rmstarsilent
 setopt nobeep
+setopt interactivecomments
