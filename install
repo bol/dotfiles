@@ -6,7 +6,7 @@ builtin emulate -L zsh -o extendedglob -o noshortloops \
                         -o warncreateglobal -o typesetsilent \
                         -o nopromptsubst
 
-typeset -g DOTFILEDIR=$(cd $(dirname $0);pwd)
+typeset -g DOTFILEDIR=$(cd "$(dirname "$0")"; pwd)
 
 function link_conf() {
   local source="$1"
@@ -16,10 +16,10 @@ function link_conf() {
     echo -e "\t\e[3mSkipping ${target}\e[0m"
     return
   fi
-  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+  [ -d "$(dirname "$target")" ] || mkdir -p "$(dirname "$target")"
 
   echo -e "\tLinking ${target}"
-  ln -s $source "$target"
+  ln -s "$source" "$target"
 }
 
 function copy_conf() {
@@ -30,7 +30,7 @@ function copy_conf() {
     echo -e "\t\e[3mSkipping ${target}\e[0m"
     return
   fi
-  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+  [ -d "$(dirname "$target")" ] || mkdir -p "$(dirname "$target")"
 
   echo -e "\tCopying ${target}"
   cp "$source" "$target"
@@ -44,7 +44,7 @@ function git_clone() {
     echo -e "\t\e[3mSkipping ${target}\e[0m"
     return
   fi
-  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+  [ -d "$(dirname "$target")" ] || mkdir -p "$(dirname "$target")"
 
   echo -e "\tCloning ${target}"
   git clone --quiet --depth 1 "$source" "$target"
@@ -58,7 +58,7 @@ function http_get() {
     echo -e "\t\e[3mSkipping ${target}\e[0m"
     return
   fi
-  [ -d $(dirname "$target") ] || mkdir -p $(dirname "$target")
+  [ -d "$(dirname "$target")" ] || mkdir -p "$(dirname "$target")"
 
   echo -e "\tDownloading ${target}"
   curl -fqsSL -o "${target}" "${source}"
@@ -75,7 +75,7 @@ function install_module() {
             exit 1
   fi
 
-  source "${install_script}" $(dirname "${install_script}")
+  source "${install_script}" "$(dirname "${install_script}")"
 }
 
 function install() {
@@ -83,14 +83,14 @@ function install() {
   local dir module
 
   if (($# == 0)); then
-    for dir in ${DOTFILEDIR}/*/install.zsh; do
-      modules_to_install+=($(basename $(dirname "$dir")))
+    for dir in "${DOTFILEDIR}"/*/install.zsh; do
+      modules_to_install+=("$(basename "$(dirname "$dir")")")
     done
   else
-    modules_to_install+=($@)
+    modules_to_install+=("$@")
   fi
 
-  for module in ${modules_to_install}; do
+  for module in "${modules_to_install[@]}"; do
     install_module "${module}"
   done
 }
