@@ -1,5 +1,5 @@
 function activate_k8s() {
-  __ensure_package_is_installed kubectl
+  __ensure_package_is_installed kubectl || return 1
 
   [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 

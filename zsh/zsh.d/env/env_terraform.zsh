@@ -1,7 +1,7 @@
 function activate_tenv() {
   local completion_path
 
-  __ensure_package_is_installed tenv
+  __ensure_package_is_installed tenv || return 1
 
   completion_path=$(mktemp -q) || return 1
   if ! tenv completion zsh > "${completion_path}"; then

@@ -2,7 +2,7 @@ function activate_markup() {
   # Use gojq instead of regular jq as the original has broken base64 handling and is no longer maintained.
   # This also gives us YAML support
   # https://github.com/stedolan/jq/issues/1931
-  __ensure_package_is_installed gojq
+  __ensure_package_is_installed gojq || return 1
 
   # Query JSON
   alias jq='gojq'

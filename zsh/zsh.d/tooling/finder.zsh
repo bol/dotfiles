@@ -1,4 +1,4 @@
-__ensure_package_is_installed fzf
+__ensure_package_is_installed fzf || return 0
 eval "$(fzf --zsh)"
 
 # Primitive visual file manager
