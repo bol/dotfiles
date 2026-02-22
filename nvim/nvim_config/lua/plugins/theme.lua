@@ -1,8 +1,10 @@
 local use = require("packer").use
 
-use {'olimorris/onedarkpro.nvim',
+use {'jan-warchol/selenized',
+     rtp = 'editors/vim',
      config = function()
-         require('onedarkpro').load()
+         vim.o.background = 'dark'
+         vim.cmd('colorscheme selenized')
      end,
 }
 
