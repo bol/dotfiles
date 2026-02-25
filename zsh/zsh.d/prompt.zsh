@@ -20,7 +20,7 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
 function +vi-git-status(){
     local line ab ahead behind status_xy
-    local staged unstaged untracked
+    local staged unstaged
     local -a gitstatus
 
     # Escape branch/action data from git so prompt escape sequences stay literal.
@@ -43,16 +43,12 @@ function +vi-git-status(){
                 [[ ${status_xy[1]} != '.' ]] && staged='yes'
                 [[ ${status_xy[2]} != '.' ]] && unstaged='yes'
                 ;;
-            '? '*)
-                untracked='yes'
-                ;;
         esac
-    done < <(git status --porcelain=2 --branch 2> /dev/null)
+    done < <(git status --porcelain=2 --branch -uno 2> /dev/null)
 
     [[ -n $staged ]] && hook_com[staged]='%F{018}●'
-    if [[ -n $unstaged || -n $untracked ]]; then
+    if [[ -n $unstaged ]]; then
         hook_com[unstaged]='%F{136}✚'
-        [[ -n $untracked ]] && hook_com[unstaged]+='%F{241}…%f'
     fi
     hook_com[misc]+=${(j:/:)gitstatus}
 }
