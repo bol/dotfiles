@@ -1,5 +1,18 @@
 local wezterm = require("wezterm")
 
+local function jetbrains_mono(spec)
+    return wezterm.font_with_fallback({
+        {
+            family = "JetBrains Mono",
+            weight = spec.weight,
+            style = spec.style,
+        },
+        {
+            family = "Symbols Nerd Font Mono",
+        },
+    })
+end
+
 local config = {
     colors = {
         foreground = "#adbcbc",
@@ -31,35 +44,23 @@ local config = {
         },
     },
 
-    font = wezterm.font("MesloLGM Nerd Font", { weight = "Regular", stretch = "Normal", style = "Normal" }),
+    font = jetbrains_mono({ weight = "Regular", style = "Normal" }),
     font_size = 16.0,
     font_rules = {
         {
             intensity = 'Bold',
             italic = false,
-            font = wezterm.font("MesloLGM Nerd Font", {
-                weight = "Bold",
-                stretch = "Normal",
-                style = "Normal",
-            }),
+            font = jetbrains_mono({ weight = "Bold", style = "Normal" }),
         },
         {
             intensity = 'Normal',
             italic = true,
-            font = wezterm.font("MesloLGM Nerd Font", {
-                weight = "Regular",
-                stretch = "Normal",
-                style = "Italic",
-            }),
+            font = jetbrains_mono({ weight = "Regular", style = "Italic" }),
         },
         {
             intensity = 'Bold',
             italic = true,
-            font = wezterm.font("MesloLGM Nerd Font", {
-                weight = "Bold",
-                stretch = "Normal",
-                style = "Italic",
-            }),
+            font = jetbrains_mono({ weight = "Bold", style = "Italic" }),
         },
     },
 

@@ -1,29 +1,46 @@
 0=${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}
 
+readonly JETBRAINS_MONO_VERSION="v2.304"
+readonly NERD_FONTS_VERSION="v3.4.0"
+
 function install_font() {
-    local font="$1"
+    local source="$1"
+    local filename="$2"
+    local font_dir
 
     case "$(uname -s)" in
         Darwin)
-            local font_dir="${HOME}/Library/Fonts"
+            font_dir="${HOME}/Library/Fonts"
             ;;
         *)
-            local font_dir="${HOME}/.local/share/fonts"
+            font_dir="${HOME}/.local/share/fonts"
             ;;
-  esac
+    esac
 
-    local base_path="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.3.3/patched-fonts"
-    local source="${base_path}/${font// /%20}"
-    local target="${font_dir}/${font}"
+    local target="${font_dir}/${filename}"
 
     http_get "${source}" "${target}"
 }
 
-install_font "Meslo/M/Regular/complete/Meslo LG M Regular Nerd Font Complete.ttf"
-install_font "Meslo/M/Italic/complete/Meslo LG M Italic Nerd Font Complete.ttf"
-install_font "Meslo/M/Bold/complete/Meslo LG M Bold Nerd Font Complete.ttf"
-install_font "Meslo/M/Bold-Italic/complete/Meslo LG M Bold Italic Nerd Font Complete.ttf"
+function refresh_font_cache() {
+    if [ "$(uname -s)" = "Darwin" ]; then
+        return 0
+    fi
 
-install_font "SourceCodePro/Regular/complete/Sauce Code Pro Nerd Font Complete.ttf"
-install_font "SourceCodePro/Bold/complete/Sauce Code Pro Bold Nerd Font Complete.ttf"
-install_font "SourceCodePro/Italic/complete/Sauce Code Pro Italic Nerd Font Complete.ttf"
+    if ! command -v fc-cache >/dev/null 2>&1; then
+        echo -e "\tSkipping font cache refresh (fc-cache not found)"
+        return 0
+    fi
+
+    echo -e "\tRefreshing font cache"
+    fc-cache -f "${HOME}/.local/share/fonts"
+}
+
+install_font "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/${JETBRAINS_MONO_VERSION}/fonts/ttf/JetBrainsMono-Regular.ttf" "JetBrainsMono-Regular.ttf" || return 1
+install_font "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/${JETBRAINS_MONO_VERSION}/fonts/ttf/JetBrainsMono-Italic.ttf" "JetBrainsMono-Italic.ttf" || return 1
+install_font "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/${JETBRAINS_MONO_VERSION}/fonts/ttf/JetBrainsMono-Bold.ttf" "JetBrainsMono-Bold.ttf" || return 1
+install_font "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/${JETBRAINS_MONO_VERSION}/fonts/ttf/JetBrainsMono-BoldItalic.ttf" "JetBrainsMono-BoldItalic.ttf" || return 1
+
+install_font "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/${NERD_FONTS_VERSION}/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf" "SymbolsNerdFontMono-Regular.ttf" || return 1
+
+refresh_font_cache || return 1

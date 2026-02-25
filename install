@@ -91,7 +91,10 @@ function install() {
   fi
 
   for module in "${modules_to_install[@]}"; do
-    install_module "${module}"
+    if ! install_module "${module}"; then
+      echo "Failed to install ${module} module" >&2
+      exit 1
+    fi
   done
 }
 
