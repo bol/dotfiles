@@ -3,6 +3,7 @@ function activate_markup() {
   # This also gives us YAML support
   # https://github.com/stedolan/jq/issues/1931
   __ensure_package_is_installed gojq || return 1
+  __ensure_package_is_installed bat || return 1
 
   # Query JSON
   alias jq='gojq'
