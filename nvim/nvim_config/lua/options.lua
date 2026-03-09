@@ -15,5 +15,6 @@ vim.opt.tabstop = 4 -- Number of spaces in a tab
 
 -- Options
 vim.opt.termguicolors = true
-vim.opt.encoding = "UTF-8" -- Set the encoding type
+vim.opt.laststatus = 3 -- Use a single global statusline
 vim.opt.mouse = "" -- Disable mouse
+vim.opt.showmode = false -- Lualine shows the current mode

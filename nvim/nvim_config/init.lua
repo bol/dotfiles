@@ -1,7 +1,9 @@
 
+vim.go.packpath = vim.env.VIMRUNTIME
+
 local modules = {
   'options',
-  'plugins',
+  'config.lazy',
 }
 
 for _,module in ipairs(modules) do

@@ -1,37 +1,12 @@
-local use = require("packer").use
+local treesitter = require('config.treesitter')
 
-use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    config = function()
-        require('nvim-treesitter.configs').setup {
-            ensure_installed = {
-                "bash",
-                "c",
-                "cmake",
-                "cpp",
-                "css",
-                "diff",
-                "dockerfile",
-                "gitattributes",
-                "go",
-                "gomod",
-                "hcl",
-                "html",
-                "json",
-                "make",
-                "markdown",
-                "rst",
-                "terraform",
-                "toml",
-                "vim",
-                "yaml",
-            },
-            sync_install = false,
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = false,
-            },
-        }
-    end,
+return {
+    {
+        'nvim-treesitter/nvim-treesitter',
+        lazy = false,
+        build = ':TSUpdate',
+        config = function()
+            treesitter.setup()
+        end,
+    },
 }
