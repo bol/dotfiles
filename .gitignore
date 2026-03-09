@@ -1,2 +1,7 @@
 .idea
 *.swp
+.codex-config-home/
+.codex-lazy-data/
+.codex-nvim-cache/
+.codex-nvim-state/
+.nvimlog
