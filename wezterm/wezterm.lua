@@ -45,9 +45,9 @@ local function update_context_status(window, pane)
     local aws_icon = wezterm.nerdfonts.dev_aws or wezterm.nerdfonts.md_aws or "aws:"
     local k8s_icon = wezterm.nerdfonts.md_kubernetes or "k8s:"
     local git = user_vars.GIT_STATUS_DISPLAY or user_vars.GIT_STATUS or ""
-    local aws = user_vars.AWS_PROFILE_DISPLAY or user_vars.AWS_PROFILE or "default"
-    local k8s = user_vars.K8S_CONTEXT_DISPLAY or user_vars.K8S_CONTEXT or "<none>"
-    local risk = user_vars.CONTEXT_RISK or "UNK"
+    local aws = user_vars.AWS_PROFILE_DISPLAY or user_vars.AWS_PROFILE or ""
+    local k8s = user_vars.K8S_CONTEXT_DISPLAY or user_vars.K8S_CONTEXT or ""
+    local risk = user_vars.CONTEXT_RISK or ""
     local risk_color = risk_colors[risk] or risk_colors.UNK
 
     if git == "<none>" then
@@ -62,10 +62,12 @@ local function update_context_status(window, pane)
     aws = middle_ellipsis(aws, 28)
     k8s = middle_ellipsis(k8s, 36)
 
-    local status = {
-        { Foreground = { Color = risk_color } },
-        { Text = "[" .. risk .. "] " },
-    }
+    local status = {}
+
+    if risk ~= "" then
+        table.insert(status, { Foreground = { Color = risk_color } })
+        table.insert(status, { Text = "[" .. risk .. "] " })
+    end
     if git ~= "" then
         table.insert(status, { Foreground = { Color = "#F05033" } })
         table.insert(status, { Attribute = { Intensity = "Bold" } })
@@ -74,18 +76,27 @@ local function update_context_status(window, pane)
         table.insert(status, { Foreground = { Color = "#cad8d9" } })
         table.insert(status, { Text = git .. "  " })
     end
-    table.insert(status, { Foreground = { Color = "#FF9900" } })
-    table.insert(status, { Attribute = { Intensity = "Bold" } })
-    table.insert(status, { Text = aws_icon .. " " })
-    table.insert(status, { Attribute = { Intensity = "Normal" } })
-    table.insert(status, { Foreground = { Color = "#cad8d9" } })
-    table.insert(status, { Text = aws .. "  " })
-    table.insert(status, { Foreground = { Color = "#326CE5" } })
-    table.insert(status, { Attribute = { Intensity = "Bold" } })
-    table.insert(status, { Text = k8s_icon .. " " })
-    table.insert(status, { Attribute = { Intensity = "Normal" } })
-    table.insert(status, { Foreground = { Color = "#cad8d9" } })
-    table.insert(status, { Text = k8s })
+    if aws ~= "" then
+        table.insert(status, { Foreground = { Color = "#FF9900" } })
+        table.insert(status, { Attribute = { Intensity = "Bold" } })
+        table.insert(status, { Text = aws_icon .. " " })
+        table.insert(status, { Attribute = { Intensity = "Normal" } })
+        table.insert(status, { Foreground = { Color = "#cad8d9" } })
+        table.insert(status, { Text = aws .. "  " })
+    end
+    if k8s ~= "" then
+        table.insert(status, { Foreground = { Color = "#326CE5" } })
+        table.insert(status, { Attribute = { Intensity = "Bold" } })
+        table.insert(status, { Text = k8s_icon .. " " })
+        table.insert(status, { Attribute = { Intensity = "Normal" } })
+        table.insert(status, { Foreground = { Color = "#cad8d9" } })
+        table.insert(status, { Text = k8s })
+    end
+
+    if #status == 0 then
+        window:set_right_status("")
+        return
+    end
 
     window:set_right_status(wezterm.format(status))
 end

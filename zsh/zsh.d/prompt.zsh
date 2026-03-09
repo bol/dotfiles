@@ -105,6 +105,8 @@ typeset -g __k8s_prompt_cache_context='<none>'
 typeset -g __k8s_prompt_cache_key=''
 typeset -g __prompt_git_raw='<none>'
 typeset -g __prompt_git_display='<none>'
+typeset -g __prompt_aws_available=0
+typeset -g __prompt_k8s_available=0
 
 function __k8s_prompt_compute_cache_key() {
   local -a kube_files
@@ -142,10 +144,12 @@ function k8s_info() {
   if ! (( $+commands[kubectl] )); then
     __k8s_prompt_cache_context='<none>'
     __k8s_prompt_cache_key=''
-    psvar[2]='<none>'
+    __prompt_k8s_available=0
+    psvar[2]=''
     return
   fi
 
+  __prompt_k8s_available=1
   __k8s_prompt_compute_cache_key
   cache_key="${REPLY}"
 
@@ -184,6 +188,14 @@ add-zsh-hook -Uz precmd k8s_info
 
 function aws_info() {
   local aws_profile aws_prompt_profile expiration
+
+  if ! (( $+commands[aws] )); then
+    __prompt_aws_available=0
+    psvar[1]=''
+    return
+  fi
+
+  __prompt_aws_available=1
   aws_profile=${AWS_PROFILE:-default}
 
 #  Session expiration calculation is too costly to use in prompt. The AWS cli command takes 300ms to parse a 1k TOML file on my recent M2 MBP.
@@ -391,6 +403,12 @@ function prompt_risk_info() {
   local label color
   local aws_context k8s_context
 
+  if (( ! __prompt_aws_available || ! __prompt_k8s_available )); then
+    __prompt_risk_badge=''
+    __prompt_risk_label=''
+    return
+  fi
+
   aws_context="${psvar[1]}"
   k8s_context="${psvar[2]}"
 
@@ -437,17 +455,19 @@ add-zsh-hook -Uz precmd prompt_risk_info
 function prompt_context_display_info() {
   local aws_context k8s_context
 
-  aws_context="${psvar[1]:-default}"
-  if [[ "${aws_context}" == 'paycontrol-'* ]]; then
-    aws_context="${aws_context#paycontrol-}"
-  fi
-  if [[ "${aws_context}" == *'-admin' ]]; then
-    aws_context="${aws_context%-admin}"
+  aws_context="${psvar[1]:-}"
+  if [[ -n "${aws_context}" ]]; then
+    if [[ "${aws_context}" == 'paycontrol-'* ]]; then
+      aws_context="${aws_context#paycontrol-}"
+    fi
+    if [[ "${aws_context}" == *'-admin' ]]; then
+      aws_context="${aws_context%-admin}"
+    fi
   fi
   psvar[3]="${aws_context}"
 
-  k8s_context="${psvar[2]:-<none>}"
-  if [[ "${k8s_context}" == *':paycontrol' ]]; then
+  k8s_context="${psvar[2]:-}"
+  if [[ -n "${k8s_context}" && "${k8s_context}" == *':paycontrol' ]]; then
     k8s_context="${k8s_context%:paycontrol}"
   fi
   psvar[4]="${k8s_context}"
@@ -480,8 +500,8 @@ function wezterm_status_user_vars() {
     return
   fi
 
-  aws_raw="${psvar[1]:-default}"
-  k8s_raw="${psvar[2]:-<none>}"
+  aws_raw="${psvar[1]:-}"
+  k8s_raw="${psvar[2]:-}"
   aws_display="${psvar[3]:-${aws_raw}}"
   k8s_display="${psvar[4]:-${k8s_raw}}"
   git_raw="${psvar[5]:-<none>}"
