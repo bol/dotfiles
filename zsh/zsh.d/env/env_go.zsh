@@ -5,8 +5,12 @@ function activate_goenv() {
             git clone https://github.com/syndbg/goenv.git ~/.goenv
         }
     export GOENV_ROOT="$HOME/.goenv"
-    path+="$GOENV_ROOT/bin"
+    export GOENV_PATH_ORDER="${GOENV_PATH_ORDER:-front}"
+    path=("${GOENV_ROOT}/bin" ${(@)path:#${GOENV_ROOT}/bin})
     eval "$(goenv init -)"
-    path+="$GOROOT/bin"
-    path+="$GOPATH/bin"
+    if [[ "${GOENV_PATH_ORDER}" == 'front' ]]; then
+        path=("${GOENV_ROOT}/shims" ${(@)path:#${GOENV_ROOT}/shims})
+    fi
+    [[ -n "${GOROOT:-}" ]] && path+=("${GOROOT}/bin")
+    [[ -n "${GOPATH:-}" ]] && path+=("${GOPATH}/bin")
 }

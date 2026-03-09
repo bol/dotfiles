@@ -3,4 +3,7 @@ setopt no_global_rcs
 export EDITOR=nvim
 export GPG_TTY=$(tty)
 
+# Keep PATH/path entries unique while preserving first occurrence order.
+typeset -U path PATH
+
 [[ -d $HOME/bin ]] && path=("${HOME}/bin" $path)
