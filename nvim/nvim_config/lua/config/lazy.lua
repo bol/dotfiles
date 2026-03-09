@@ -20,6 +20,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup('plugins', {
     local_spec = false,
+    lockfile = vim.fn.stdpath('state') .. '/lazy/lazy-lock.json',
     install = {
         colorscheme = {'selenized'},
     },
