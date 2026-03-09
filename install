@@ -64,6 +64,47 @@ function http_get() {
   curl -fqsSL -o "${target}" "${source}"
 }
 
+function ensure_homebrew() {
+  [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+  if command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "The brew command was not found."
+  read -q "?Do you want to install it? " || return -1
+  print ''
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || return 1
+  [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+  command -v brew >/dev/null 2>&1
+}
+
+function ensure_package_installed() {
+  local command="$1"
+  local package="${2:-${command}}"
+
+  case "$(uname -s)" in
+    Darwin)
+      ensure_homebrew || return 1
+      if ! command -v "${command}" >/dev/null 2>&1; then
+        echo "The ${package} homebrew package is not installed."
+        read -q "?Do you want to install it? " || return -1
+        print ''
+        brew install "${package}" || return 1
+        rehash
+      fi
+      command -v "${command}" >/dev/null 2>&1
+      ;;
+    *)
+      if ! command -v "${command}" >/dev/null 2>&1; then
+        echo "${command} is required but was not found on your path." >&2
+        echo "Please install the ${package} package manually and rerun ./install." >&2
+        return 1
+      fi
+      ;;
+  esac
+}
+
 function install_module() {
   readonly module="${1}"
   readonly install_script="${DOTFILEDIR}/${module}/install.zsh"
