@@ -13,13 +13,14 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes false
 zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:*' unstagedstr '~'
-zstyle ':vcs_info:*' formats       'git:%b%m%c%u'
-zstyle ':vcs_info:*' actionformats 'git:%b%m%c%u|%a'
+zstyle ':vcs_info:*' formats       '%K{239}%F{208}git%f%k:%b%m%c%u'
+zstyle ':vcs_info:*' actionformats '%K{239}%F{208}git%f%k:%b%m%c%u|%a'
 zstyle ':vcs_info:git*+set-message:*' hooks git-status
 
 function +vi-git-status(){
     local line ab ahead behind status_xy
     local staged unstaged
+    local branch_for_var action_for_var misc_for_var git_raw git_display
     local -a gitstatus
 
     __prompt_middle_ellipsis "${hook_com[branch]}" 32
@@ -55,13 +56,55 @@ function +vi-git-status(){
         hook_com[unstaged]=' ~'
     fi
     (( ${#gitstatus[@]} > 0 )) && hook_com[misc]+=" ${(j:/:)gitstatus}"
+
+    branch_for_var="${hook_com[branch]//%%/%}"
+    action_for_var="${hook_com[action]//%%/%}"
+    misc_for_var="${hook_com[misc]## }"
+    git_raw="${branch_for_var}"
+    if [[ -n "${action_for_var}" ]]; then
+      git_raw+="|${action_for_var}"
+    fi
+    if [[ -n "${misc_for_var}" ]]; then
+      git_raw+=" ${misc_for_var}"
+    fi
+    if [[ -n "${hook_com[staged]}" ]]; then
+      git_raw+=" +"
+    fi
+    if [[ -n "${hook_com[unstaged]}" ]]; then
+      git_raw+=" ~"
+    fi
+
+    if [[ -n "${git_raw}" ]]; then
+      git_display="git:${git_raw}"
+      __prompt_git_raw="${git_raw}"
+      __prompt_git_display="${git_display}"
+    else
+      __prompt_git_raw='<none>'
+      __prompt_git_display='<none>'
+    fi
 }
 
 add-zsh-hook -Uz precmd vcs_info
 
+function prompt_git_status_info() {
+  if [[ -n "${vcs_info_msg_0_}" ]]; then
+    psvar[5]="${__prompt_git_raw}"
+    psvar[6]="${__prompt_git_display}"
+  else
+    __prompt_git_raw='<none>'
+    __prompt_git_display='<none>'
+    psvar[5]='<none>'
+    psvar[6]='<none>'
+  fi
+}
+
+add-zsh-hook -Uz precmd prompt_git_status_info
+
 zmodload zsh/stat 2>/dev/null
 typeset -g __k8s_prompt_cache_context='<none>'
 typeset -g __k8s_prompt_cache_key=''
+typeset -g __prompt_git_raw='<none>'
+typeset -g __prompt_git_display='<none>'
 
 function __k8s_prompt_compute_cache_key() {
   local -a kube_files
@@ -200,6 +243,7 @@ function __prompt_middle_ellipsis() {
 }
 
 typeset -g __prompt_risk_badge='[UNK]'
+typeset -g __prompt_risk_label='UNK'
 
 function __prompt_matches_any_pattern() {
   local value patterns_name pattern
@@ -219,7 +263,7 @@ function __prompt_matches_any_pattern() {
 
 function __prompt_context_risk_level() {
   local source value lowered normalized token prev_token
-  local has_negated_prod
+  local has_negated_prod has_private has_managed has_saas has_psaas
   local prod_overrides stage_overrides dev_overrides
   local -a tokens
 
@@ -270,11 +314,28 @@ function __prompt_context_risk_level() {
   normalized="${lowered//[^[:alnum:]]/ }"
   tokens=(${=normalized})
 
+  has_private=0
+  has_managed=0
+  has_saas=0
+  has_psaas=0
+
   prev_token=''
   for token in "${tokens[@]}"; do
     case "${token}" in
       nonprod|nonproduction|nonlive)
         has_negated_prod=1
+        ;;
+      private)
+        has_private=1
+        ;;
+      managed)
+        has_managed=1
+        ;;
+      saas)
+        has_saas=1
+        ;;
+      psaas)
+        has_psaas=1
         ;;
     esac
 
@@ -317,35 +378,16 @@ function __prompt_context_risk_level() {
     fi
   done
 
+  if (( ! has_negated_prod )) && (( has_psaas || (has_private && has_saas) || (has_managed && has_saas) )); then
+    REPLY='prod'
+    return
+  fi
+
   REPLY='unk'
 }
 
-function __prompt_risk_source_tag() {
-  local target aws_level k8s_level
-  local from_aws from_k8s
-
-  target="${1:-unk}"
-  aws_level="${2:-unk}"
-  k8s_level="${3:-unk}"
-
-  from_aws=0
-  from_k8s=0
-  [[ "${aws_level}" == "${target}" ]] && from_aws=1
-  [[ "${k8s_level}" == "${target}" ]] && from_k8s=1
-
-  if (( from_aws && from_k8s )); then
-    REPLY='both'
-  elif (( from_aws )); then
-    REPLY='aws'
-  elif (( from_k8s )); then
-    REPLY='k8s'
-  else
-    REPLY='none'
-  fi
-}
-
 function prompt_risk_info() {
-  local aws_level k8s_level level source
+  local aws_level k8s_level level
   local label color
   local aws_context k8s_context
 
@@ -367,20 +409,17 @@ function prompt_risk_info() {
     level='unk'
   fi
 
-  __prompt_risk_source_tag "${level}" "${aws_level}" "${k8s_level}"
-  source="${REPLY}"
-
   case "${level}" in
     prod)
       label='PROD'
       color='160'
       ;;
     stage)
-      label='STAGE'
+      label='PREPROD'
       color='178'
       ;;
     dev)
-      label='DEV'
+      label='NONPROD'
       color='70'
       ;;
     *)
@@ -389,11 +428,8 @@ function prompt_risk_info() {
       ;;
   esac
 
-  if [[ "${source}" == 'none' ]]; then
-    __prompt_risk_badge="%B%F{${color}}${label}%f%b"
-  else
-    __prompt_risk_badge="%B%F{${color}}${label}%f%b%F{244}/${source}%f"
-  fi
+  __prompt_risk_badge="%B%F{${color}}${label}%f%b"
+  __prompt_risk_label="${label}"
 }
 
 add-zsh-hook -Uz precmd prompt_risk_info
@@ -402,15 +438,66 @@ function prompt_context_display_info() {
   local aws_context k8s_context
 
   aws_context="${psvar[1]:-default}"
+  if [[ "${aws_context}" == 'paycontrol-'* ]]; then
+    aws_context="${aws_context#paycontrol-}"
+  fi
+  if [[ "${aws_context}" == *'-admin' ]]; then
+    aws_context="${aws_context%-admin}"
+  fi
   psvar[3]="${aws_context}"
 
   k8s_context="${psvar[2]:-<none>}"
-  __prompt_middle_ellipsis "${k8s_context}" 28
-  psvar[4]="${REPLY}"
+  if [[ "${k8s_context}" == *':paycontrol' ]]; then
+    k8s_context="${k8s_context%:paycontrol}"
+  fi
+  psvar[4]="${k8s_context}"
 }
 
 add-zsh-hook -Uz precmd prompt_context_display_info
 
+function __wezterm_set_user_var() {
+  local name value encoded
+  name="${1}"
+  value="${2:-}"
+
+  if ! (( $+commands[base64] )); then
+    return
+  fi
+
+  encoded="$(printf '%s' "${value}" | base64 | tr -d '\r\n')"
+  if [[ -z "${TMUX:-}" ]]; then
+    printf "\033]1337;SetUserVar=%s=%s\007" "${name}" "${encoded}"
+  else
+    # Requires `set -g allow-passthrough on` in tmux.
+    printf "\033Ptmux;\033\033]1337;SetUserVar=%s=%s\007\033\\" "${name}" "${encoded}"
+  fi
+}
+
+function wezterm_status_user_vars() {
+  local aws_raw k8s_raw aws_display k8s_display git_raw git_display
+
+  if [[ -z "${WEZTERM_PANE:-}" && "${TERM_PROGRAM:-}" != 'WezTerm' ]]; then
+    return
+  fi
+
+  aws_raw="${psvar[1]:-default}"
+  k8s_raw="${psvar[2]:-<none>}"
+  aws_display="${psvar[3]:-${aws_raw}}"
+  k8s_display="${psvar[4]:-${k8s_raw}}"
+  git_raw="${psvar[5]:-<none>}"
+  git_display="${psvar[6]:-${git_raw}}"
+
+  __wezterm_set_user_var 'AWS_PROFILE' "${aws_raw}"
+  __wezterm_set_user_var 'K8S_CONTEXT' "${k8s_raw}"
+  __wezterm_set_user_var 'AWS_PROFILE_DISPLAY' "${aws_display}"
+  __wezterm_set_user_var 'K8S_CONTEXT_DISPLAY' "${k8s_display}"
+  __wezterm_set_user_var 'GIT_STATUS' "${git_raw}"
+  __wezterm_set_user_var 'GIT_STATUS_DISPLAY' "${git_display}"
+  __wezterm_set_user_var 'CONTEXT_RISK' "${__prompt_risk_label}"
+}
+
+add-zsh-hook -Uz precmd wezterm_status_user_vars
+
 NEWLINE=$'\n'
-PROMPT='${__prompt_risk_badge} %F{111}%3~%f ${vcs_info_msg_0_} %K{239}%F{252} aws %f%k %3v %F{240}·%f %K{239}%F{252} k8s %f%k %4v${NEWLINE}%K{238}%B%F{81} %(!.#.>) %f%b%k '
+PROMPT='%F{111}%3~%f${NEWLINE}%K{238}%B%F{81} %(!.#.>) %f%b%k '
 RPROMPT=''
