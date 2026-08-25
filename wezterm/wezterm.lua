@@ -1,4 +1,6 @@
 local wezterm = require("wezterm")
+local is_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
+    or (os.getenv("WAYLAND_DISPLAY") or "") ~= ""
 
 local function jetbrains_mono(spec)
     return wezterm.font_with_fallback({
@@ -171,6 +173,7 @@ local config = {
     enable_tab_bar = true,
     hide_tab_bar_if_only_one_tab = false,
     audible_bell = "Disabled",
+    notification_handling = "NeverShow",
     window_close_confirmation = "NeverPrompt",
     status_update_interval = 1000,
     window_frame = {
@@ -182,6 +185,13 @@ if wezterm.target_triple == 'aarch64-apple-darwin' or wezterm.target_triple == '
     config.default_prog = { '/opt/homebrew/bin/zsh' }
 else
     config.default_prog = { '/usr/bin/env', 'zsh' }
+    if is_wayland then
+        -- Avoid GNOME Wayland buffer_scale protocol errors with this WezTerm build.
+        config.enable_wayland = true
+        -- Mutter does not provide usable server-side decorations for WezTerm.
+        -- Keep the tab bar as the only title area while retaining resize support.
+        config.window_decorations = "RESIZE"
+    end
 end
 
 return config
