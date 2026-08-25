@@ -403,7 +403,7 @@ function prompt_risk_info() {
   local label color
   local aws_context k8s_context
 
-  if (( ! __prompt_aws_available || ! __prompt_k8s_available )); then
+  if (( ! __prompt_aws_available && ! __prompt_k8s_available )); then
     __prompt_risk_badge=''
     __prompt_risk_label=''
     return

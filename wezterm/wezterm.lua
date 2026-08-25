@@ -22,23 +22,27 @@ local risk_colors = {
     UNK = "#72898f",
 }
 
-local function middle_ellipsis(text, max_len)
+local function middle_ellipsis(text, max_width)
     if text == nil or text == "" then
         return ""
     end
 
-    if #text <= max_len then
+    if wezterm.column_width(text) <= max_width then
         return text
     end
 
-    if max_len <= 3 then
-        return text:sub(1, max_len)
+    local ellipsis = "..."
+    local ellipsis_width = wezterm.column_width(ellipsis)
+    if max_width <= ellipsis_width then
+        return wezterm.truncate_right(text, max_width)
     end
 
-    local keep = max_len - 3
+    local keep = max_width - ellipsis_width
     local keep_left = math.floor(keep / 2)
     local keep_right = keep - keep_left
-    return text:sub(1, keep_left) .. "..." .. text:sub(#text - keep_right + 1)
+    return wezterm.truncate_right(text, keep_left)
+        .. ellipsis
+        .. wezterm.truncate_left(text, keep_right)
 end
 
 local function update_context_status(window, pane)
@@ -107,87 +111,71 @@ wezterm.on("update-status", function(window, pane)
     update_context_status(window, pane)
 end)
 
-wezterm.on("user-var-changed", function(window, pane, name, _value)
-    if name == "AWS_PROFILE"
-        or name == "K8S_CONTEXT"
-        or name == "AWS_PROFILE_DISPLAY"
-        or name == "K8S_CONTEXT_DISPLAY"
-        or name == "GIT_STATUS"
-        or name == "GIT_STATUS_DISPLAY"
-        or name == "CONTEXT_RISK" then
-        update_context_status(window, pane)
-    end
-end)
+local config = wezterm.config_builder()
+config:set_strict_mode(true)
 
-local config = {
-    colors = {
-        foreground = "#adbcbc",
-        background = "#103c48",
-        cursor_bg = "#adbcbc",
-        cursor_fg = "#103c48",
-        cursor_border = "#adbcbc",
-        selection_bg = "#184956",
-        selection_fg = "#cad8d9",
-        ansi = {
-            "#184956",
-            "#fa5750",
-            "#75b938",
-            "#dbb32d",
-            "#4695f7",
-            "#f275be",
-            "#41c7b9",
-            "#72898f",
-        },
-        brights = {
-            "#2d5b69",
-            "#ff665c",
-            "#84c747",
-            "#ebc13d",
-            "#58a3ff",
-            "#ff84cd",
-            "#53d6c7",
-            "#cad8d9",
-        },
+config.colors = {
+    foreground = "#adbcbc",
+    background = "#103c48",
+    cursor_bg = "#adbcbc",
+    cursor_fg = "#103c48",
+    cursor_border = "#adbcbc",
+    selection_bg = "#184956",
+    selection_fg = "#cad8d9",
+    ansi = {
+        "#184956",
+        "#fa5750",
+        "#75b938",
+        "#dbb32d",
+        "#4695f7",
+        "#f275be",
+        "#41c7b9",
+        "#72898f",
     },
-
-    font = jetbrains_mono({ weight = "Regular", style = "Normal" }),
-    font_size = 16.0,
-    font_rules = {
-        {
-            intensity = 'Bold',
-            italic = false,
-            font = jetbrains_mono({ weight = "Bold", style = "Normal" }),
-        },
-        {
-            intensity = 'Normal',
-            italic = true,
-            font = jetbrains_mono({ weight = "Regular", style = "Italic" }),
-        },
-        {
-            intensity = 'Bold',
-            italic = true,
-            font = jetbrains_mono({ weight = "Bold", style = "Italic" }),
-        },
-    },
-
-    enable_tab_bar = true,
-    hide_tab_bar_if_only_one_tab = false,
-    audible_bell = "Disabled",
-    notification_handling = "NeverShow",
-    window_close_confirmation = "NeverPrompt",
-    status_update_interval = 1000,
-    window_frame = {
-        font_size = 18.0,
+    brights = {
+        "#2d5b69",
+        "#ff665c",
+        "#84c747",
+        "#ebc13d",
+        "#58a3ff",
+        "#ff84cd",
+        "#53d6c7",
+        "#cad8d9",
     },
 }
 
-if wezterm.target_triple == 'aarch64-apple-darwin' or wezterm.target_triple == 'x86_64-apple-darwin' then
-    config.default_prog = { '/opt/homebrew/bin/zsh' }
+config.font = jetbrains_mono({ weight = "Regular", style = "Normal" })
+config.font_size = 16.0
+config.font_rules = {
+    {
+        intensity = 'Bold',
+        italic = false,
+        font = jetbrains_mono({ weight = "Bold", style = "Normal" }),
+    },
+    {
+        intensity = 'Normal',
+        italic = true,
+        font = jetbrains_mono({ weight = "Regular", style = "Italic" }),
+    },
+    {
+        intensity = 'Bold',
+        italic = true,
+        font = jetbrains_mono({ weight = "Bold", style = "Italic" }),
+    },
+}
+
+config.audible_bell = "Disabled"
+config.notification_handling = "NeverShow"
+config.window_close_confirmation = "NeverPrompt"
+config.window_frame = {
+    font_size = 18.0,
+}
+
+if wezterm.target_triple == 'aarch64-apple-darwin' then
+    config.default_prog = { '/bin/zsh' }
 else
     config.default_prog = { '/usr/bin/env', 'zsh' }
     if is_wayland then
-        -- Avoid GNOME Wayland buffer_scale protocol errors with this WezTerm build.
-        config.enable_wayland = true
         -- Mutter does not provide usable server-side decorations for WezTerm.
         -- Keep the tab bar as the only title area while retaining resize support.
         config.window_decorations = "RESIZE"
