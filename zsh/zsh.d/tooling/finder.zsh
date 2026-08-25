@@ -1,7 +1,7 @@
 __ensure_package_is_installed fzf || return 1
 
 # Opinionated fzf defaults for an always-on, compact interface.
-export FZF_DEFAULT_OPTS='--height 40% --tmux bottom,40% --layout reverse --border --filepath-word'
+export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border --filepath-word'
 
 # Keep shell widgets and completion focused on relevant files.
 typeset -g __fzf_walker_skip='.git,node_modules,target,.next,.turbo,.cache'

@@ -485,12 +485,7 @@ function __wezterm_set_user_var() {
   fi
 
   encoded="$(printf '%s' "${value}" | base64 | tr -d '\r\n')"
-  if [[ -z "${TMUX:-}" ]]; then
-    printf "\033]1337;SetUserVar=%s=%s\007" "${name}" "${encoded}"
-  else
-    # Requires `set -g allow-passthrough on` in tmux.
-    printf "\033Ptmux;\033\033]1337;SetUserVar=%s=%s\007\033\\" "${name}" "${encoded}"
-  fi
+  printf "\033]1337;SetUserVar=%s=%s\007" "${name}" "${encoded}"
 }
 
 function __prompt_json_escape() {
