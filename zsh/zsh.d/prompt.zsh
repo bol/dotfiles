@@ -493,30 +493,59 @@ function __wezterm_set_user_var() {
   fi
 }
 
-function wezterm_status_user_vars() {
-  local aws_raw k8s_raw aws_display k8s_display git_raw git_display
+function __prompt_json_escape() {
+  local value char escaped code
+  local -i index
+
+  value="${1:-}"
+  escaped=''
+
+  for (( index = 1; index <= ${#value}; index++ )); do
+    char="${value[index]}"
+    case "${char}" in
+      '"') char='\"' ;;
+      '\') char='\\' ;;
+      $'\b') char='\b' ;;
+      $'\f') char='\f' ;;
+      $'\n') char='\n' ;;
+      $'\r') char='\r' ;;
+      $'\t') char='\t' ;;
+      *)
+        if [[ "${char}" == [[:cntrl:]] ]]; then
+          printf -v code '%d' "'${char}"
+          if (( code < 32 )); then
+            printf -v char '\\u%04x' "${code}"
+          fi
+        fi
+        ;;
+    esac
+    escaped+="${char}"
+  done
+
+  REPLY="${escaped}"
+}
+
+function wezterm_shell_context() {
+  local aws_display k8s_display git_display risk
 
   if [[ -z "${WEZTERM_PANE:-}" && "${TERM_PROGRAM:-}" != 'WezTerm' ]]; then
     return
   fi
 
-  aws_raw="${psvar[1]:-}"
-  k8s_raw="${psvar[2]:-}"
-  aws_display="${psvar[3]:-${aws_raw}}"
-  k8s_display="${psvar[4]:-${k8s_raw}}"
-  git_raw="${psvar[5]:-<none>}"
-  git_display="${psvar[6]:-${git_raw}}"
+  __prompt_json_escape "${psvar[6]:-${psvar[5]:-<none>}}"
+  git_display="${REPLY}"
+  __prompt_json_escape "${psvar[3]:-${psvar[1]:-}}"
+  aws_display="${REPLY}"
+  __prompt_json_escape "${psvar[4]:-${psvar[2]:-}}"
+  k8s_display="${REPLY}"
+  __prompt_json_escape "${__prompt_risk_label}"
+  risk="${REPLY}"
 
-  __wezterm_set_user_var 'AWS_PROFILE' "${aws_raw}"
-  __wezterm_set_user_var 'K8S_CONTEXT' "${k8s_raw}"
-  __wezterm_set_user_var 'AWS_PROFILE_DISPLAY' "${aws_display}"
-  __wezterm_set_user_var 'K8S_CONTEXT_DISPLAY' "${k8s_display}"
-  __wezterm_set_user_var 'GIT_STATUS' "${git_raw}"
-  __wezterm_set_user_var 'GIT_STATUS_DISPLAY' "${git_display}"
-  __wezterm_set_user_var 'CONTEXT_RISK' "${__prompt_risk_label}"
+  __wezterm_set_user_var 'SHELL_CONTEXT' \
+    "{\"version\":1,\"git\":\"${git_display}\",\"aws\":\"${aws_display}\",\"k8s\":\"${k8s_display}\",\"risk\":\"${risk}\"}"
 }
 
-add-zsh-hook -Uz precmd wezterm_status_user_vars
+add-zsh-hook -Uz precmd wezterm_shell_context
 
 NEWLINE=$'\n'
 PROMPT='%F{111}%3~%f${NEWLINE}%K{238}%B%F{81} %(!.#.>) %f%b%k '

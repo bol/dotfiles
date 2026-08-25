@@ -45,15 +45,38 @@ local function middle_ellipsis(text, max_width)
         .. wezterm.truncate_left(text, keep_right)
 end
 
-local function update_context_status(window, pane)
+local function shell_context(pane)
     local user_vars = pane:get_user_vars() or {}
+    local encoded = user_vars.SHELL_CONTEXT
+    if encoded == nil or encoded == "" then
+        return {}
+    end
+
+    local ok, context = pcall(wezterm.json_parse, encoded)
+    if not ok or type(context) ~= "table" or context.version ~= 1 then
+        return {}
+    end
+
+    return context
+end
+
+local function context_string(context, key)
+    local value = context[key]
+    if type(value) == "string" then
+        return value
+    end
+    return ""
+end
+
+local function update_context_status(window, pane)
+    local context = shell_context(pane)
     local git_icon = wezterm.nerdfonts.dev_git_branch or wezterm.nerdfonts.md_git or "git:"
     local aws_icon = wezterm.nerdfonts.dev_aws or wezterm.nerdfonts.md_aws or "aws:"
     local k8s_icon = wezterm.nerdfonts.md_kubernetes or "k8s:"
-    local git = user_vars.GIT_STATUS_DISPLAY or user_vars.GIT_STATUS or ""
-    local aws = user_vars.AWS_PROFILE_DISPLAY or user_vars.AWS_PROFILE or ""
-    local k8s = user_vars.K8S_CONTEXT_DISPLAY or user_vars.K8S_CONTEXT or ""
-    local risk = user_vars.CONTEXT_RISK or ""
+    local git = context_string(context, "git")
+    local aws = context_string(context, "aws")
+    local k8s = context_string(context, "k8s")
+    local risk = context_string(context, "risk")
     local risk_color = risk_colors[risk] or risk_colors.UNK
 
     if git == "<none>" then
