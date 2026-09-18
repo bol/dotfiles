@@ -16,6 +16,21 @@ activate_podman
 activate_sdkman
 activate_tenv
 ```
+
+## Homebrew upgrades on macOS
+
+Run `brew update && brew upgrade` to refresh package metadata and upgrade installed tools. These dotfiles disable automatic metadata refresh.
+
+Tool modules can opt casks into greedy upgrades by calling the shared helper when the module is sourced:
+
+```shell
+register_homebrew_greedy_casks gcloud-cli
+```
+
+It accepts one or more cask names, merges them into `HOMEBREW_UPGRADE_GREEDY_CASKS`, preserves existing entries, and removes duplicates. It is a no-op outside macOS. The helper is loaded before platform bootstrap and tool modules, and is also available in `~/.zshrc_local`. Register at module scope so upgrades do not depend on calling `activate_<name>` first.
+
+GCP registers its `auto_updates` cask this way. The [Codex CLI cask](https://formulae.brew.sh/cask/codex) is versioned and does not currently set `auto_updates`, so ordinary upgrades already include it. AWS CLI is a formula and likewise needs no opt-in.
+
 ## Environment support
 The module contains for option support for environments. These are not loaded by default and must be activated with `activate_<name>` to use.
 ### AWS
@@ -29,7 +44,7 @@ Activated with `activate_gcloud`. Reuses `gcloud` on `PATH`, or discovers an SDK
 
 On macOS, offers to install the `gcloud-cli` Homebrew cask, an [installation method documented by Google](https://docs.cloud.google.com/sdk/docs/downloads-homebrew). Homebrew handles the official Google binaries, Python dependency, and Apple Silicon/Intel selection. Run `updategcloudcli_macos` to install or update: Homebrew SDKs use `brew update` followed by `brew upgrade --cask gcloud-cli`; existing standalone SDKs continue to use `gcloud components update` and are not migrated automatically.
 
-The macOS bootstrap adds `gcloud-cli` to `HOMEBREW_UPGRADE_GREEDY_CASKS`, preserving other entries, so ordinary `brew upgrade` includes this `auto_updates` cask. Run `brew update` before upgrading because these dotfiles disable automatic metadata refresh. Google documents `gcloud components update` even for Homebrew installs; these dotfiles use Brew for those upgrades to keep package management unified.
+The GCP module registers `gcloud-cli` with `register_homebrew_greedy_casks`, so ordinary `brew upgrade` includes this `auto_updates` cask. Google documents `gcloud components update` even for Homebrew installs; these dotfiles use Brew for those upgrades to keep package management unified.
 
 On Linux, prints package-manager instructions instead of installing automatically. Google's package repository must be configured before installing `google-cloud-cli` with APT, DNF, or YUM. Use the package manager to update those installations.
 ### Go

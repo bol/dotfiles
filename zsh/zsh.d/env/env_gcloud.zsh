@@ -1,3 +1,6 @@
+# Include the cask in upgrades even when this shell has not activated gcloud.
+register_homebrew_greedy_casks gcloud-cli
+
 function __gcloud_sdk_root() {
   local sdk_root
   REPLY=''
