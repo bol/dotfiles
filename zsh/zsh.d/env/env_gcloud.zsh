@@ -1,6 +1,3 @@
-# Include the cask in upgrades even when this shell has not activated gcloud.
-register_homebrew_greedy_casks gcloud-cli
-
 function __gcloud_sdk_root() {
   local sdk_root
   REPLY=''
@@ -54,6 +51,9 @@ function activate_gcloud() {
   fi
   if [[ -r "${sdk_root}/completion.zsh.inc" ]]; then
     source "${sdk_root}/completion.zsh.inc" || return 1
+  fi
+  if [[ "$(uname -s)" == 'Darwin' ]]; then
+    register_homebrew_greedy_casks gcloud-cli
   fi
   return 0
 }
