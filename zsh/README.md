@@ -19,9 +19,19 @@ activate_tenv
 ## Environment support
 The module contains for option support for environments. These are not loaded by default and must be activated with `activate_<name>` to use.
 ### AWS
-Activated with `activate_aws`. Install the AWS CLI and command completions. Uses AWS official bash-compatible completion in zsh.
+Activated with `activate_aws`. On macOS, offers to install the `awscli` Homebrew formula when the CLI is missing. Prefers the formula's `bin` directory over older standalone installations without duplicating `PATH` entries, and uses the selected CLI's own bash-compatible completer in zsh. Existing standalone installations remain usable until Homebrew's AWS CLI is installed.
+
+Run `updateawscli_macos` to install or upgrade through Homebrew and activate that installation. Ordinary `brew update && brew upgrade` also includes AWS CLI; it needs no cask upgrade opt-in. This helper replaces the previous official-package updater, so running it with only a standalone installation adopts Homebrew without removing the old installation.
+
+The [Homebrew formula](https://formulae.brew.sh/formula/awscli) is community-managed. [AWS recommends its own installer](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and does not guarantee third-party repository freshness. On Linux, activation continues to print distribution-specific installation guidance when the CLI is missing.
 ### GCP
-Activated with `activate_gcloud`. Install the GCP CLI and command completions.
+Activated with `activate_gcloud`. Reuses `gcloud` on `PATH`, or discovers an SDK in `~/google-cloud-sdk` or the Homebrew prefix. Adds the SDK's `bin` directory to `PATH` without duplicates so additional components are available, and loads its zsh completions when available.
+
+On macOS, offers to install the `gcloud-cli` Homebrew cask, an [installation method documented by Google](https://docs.cloud.google.com/sdk/docs/downloads-homebrew). Homebrew handles the official Google binaries, Python dependency, and Apple Silicon/Intel selection. Run `updategcloudcli_macos` to install or update: Homebrew SDKs use `brew update` followed by `brew upgrade --cask gcloud-cli`; existing standalone SDKs continue to use `gcloud components update` and are not migrated automatically.
+
+The macOS bootstrap adds `gcloud-cli` to `HOMEBREW_UPGRADE_GREEDY_CASKS`, preserving other entries, so ordinary `brew upgrade` includes this `auto_updates` cask. Run `brew update` before upgrading because these dotfiles disable automatic metadata refresh. Google documents `gcloud components update` even for Homebrew installs; these dotfiles use Brew for those upgrades to keep package management unified.
+
+On Linux, prints package-manager instructions instead of installing automatically. Google's package repository must be configured before installing `google-cloud-cli` with APT, DNF, or YUM. Use the package manager to update those installations.
 ### Go
 Activated with `activate_goenv`. Installs and initializes [Goenv](https://github.com/syndbg/goenv.git) for go version management.
 ### Java

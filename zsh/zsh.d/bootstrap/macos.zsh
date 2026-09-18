@@ -9,6 +9,12 @@ function __setup_macos() {
   export HOMEBREW_NO_ANALYTICS=1
   export HOMEBREW_NO_ENV_HINTS=1
 
+  # Include gcloud's auto_updates cask in ordinary brew upgrades.
+  case " ${HOMEBREW_UPGRADE_GREEDY_CASKS:-} " in
+    *' gcloud-cli '*) ;;
+    *) export HOMEBREW_UPGRADE_GREEDY_CASKS="${HOMEBREW_UPGRADE_GREEDY_CASKS:+${HOMEBREW_UPGRADE_GREEDY_CASKS} }gcloud-cli" ;;
+  esac
+
   # Install utilities
   __ensure_package_is_installed coreutils
   __ensure_package_is_installed openssl
